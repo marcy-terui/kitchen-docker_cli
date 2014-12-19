@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'test-kitchen', github: 'test-kitchen/test-kitchen', ref: '237efd1'
+  spec.add_dependency 'test-kitchen', '1.2.2.dev'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
   spec.add_development_dependency 'rake'
@@ -26,4 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'cane'
   spec.add_development_dependency 'tailor'
   spec.add_development_dependency 'countloc'
+  spec.add_development_dependency "coveralls"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec-its"
 end

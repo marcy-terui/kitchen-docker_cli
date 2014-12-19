@@ -1,6 +1,12 @@
 require "bundler/gem_tasks"
 require 'cane/rake_task'
 require 'tailor/rake_task'
+require 'rake/testtask'
+
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+end
 
 desc "Run cane to check quality metrics"
 Cane::RakeTask.new do |cane|
@@ -18,4 +24,4 @@ end
 desc "Run all quality tasks"
 task :quality => [:cane, :tailor, :stats]
 
-task :default => [:quality]
+task :default => [:spec, :quality]
