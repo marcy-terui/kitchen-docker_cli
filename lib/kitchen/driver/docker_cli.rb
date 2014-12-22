@@ -32,7 +32,7 @@ module Kitchen
         state[:container_id] = docker_run(state) unless state[:container_id]
       end
 
-      protected
+      # protected
 
       def docker_build
         cmd = "build"
@@ -49,9 +49,9 @@ module Kitchen
       end
 
       def docker_file
-        file = ["FROM #{config[:image]}\n"]
-        Array(config[:run_command]).each {|cmd| file << "RUN #{cmd}\n"}
-        file.join('\n')
+        file = ["FROM #{config[:image]}"]
+        Array(config[:run_command]).each {|cmd| file << "RUN #{cmd}"}
+        file.join("\n")
       end
 
       def docker_command(cmd, opts={})
