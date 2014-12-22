@@ -1,6 +1,6 @@
-# <a name="title"></a> Kitchen::DockerCli
+# <a name="title"></a> Kitchen::DockerCLI [![Build Status](https://travis-ci.org/marcy-terui/kitchen-docker_cli.svg?branch=master)](https://travis-ci.org/marcy-terui/kitchen-docker_cli) [![Coverage Status](https://coveralls.io/repos/marcy-terui/kitchen-docker_cli/badge.png)](https://coveralls.io/r/marcy-terui/kitchen-docker_cli) [![Code Climate](https://codeclimate.com/github/marcy-terui/kitchen-docker_cli/badges/gpa.svg)](https://codeclimate.com/github/marcy-terui/kitchen-docker_cli)
 
-A Test Kitchen Driver for DockerCli.
+A Test Kitchen Driver for Docker command line interface.
 
 ## <a name="requirements"></a> Requirements
 
