@@ -25,36 +25,74 @@ module Kitchen
     # Docker CLI driver for Kitchen.
     #
     # @author Masashi Terui <marcy9114@gmail.com>
-    class DockerCLI < Kitchen::Driver::Base
+    class DockerCli < Kitchen::Driver::Base
+
+      default_config :command, '/bin/bash'
+
+      default_config :image do |driver|
+        driver.default_image
+      end
+
+      def default_image
+        platform, version = instance.platform.name.split('-')
+        if platform == 'centos' && version
+          version = "centos#{version.split('.').first}"
+        end
+        version ? [platform, version].join(':') : platform
+      end
 
       def create(state)
-        state[:image] = docker_build unless state[:image]
-        state[:container_id] = docker_run(state) unless state[:container_id]
+        state[:image] = build unless state[:image]
+        state[:container_id] = run(state[:image]) unless state[:container_id]
       end
 
-      # protected
+      def build
+        output = docker_exec(docker_build_command, :input => docker_file)
+        parse_image_id(output)
+      end
 
-      def docker_build
-        cmd = "build"
-        cmd << " --no-cache" unless config[:no_cache]
-        output = docker_command(cmd, :input => docker_file)
-        container_id = output.chomp
-        unless container_id.match(/^[0-9a-z]+$/)
-          raise ActionFailed, "Build failed. Could not set CONTAINER ID."
+      def run(image)
+        output = docker_exec(docker_run_command(image))
+        parse_container_id(output)
+      end
+
+      def docker_build_command
+        cmd = 'build'
+        cmd << ' --no-cache' if config[:no_cache]
+        cmd << ' -'
+      end
+
+      def docker_run_command(image)
+        cmd = 'run -d'
+        cmd << " --name #{config[:container_name]}" if config[:container_name]
+        cmd << ' -P' if config[:publish_all]
+        Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
+        Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
+        Array(config[:link]).each { |link| cmd << " --link #{link}" }
+        cmd << " #{image} #{config[:command]}"
+      end
+
+      def parse_image_id(output)
+        unless output.chomp.match(/Successfully built ([0-9a-z]{12})$/)
+          raise ActionFailed, 'Could not parse IMAGE ID.'
         end
-        container_id
+        $1
       end
 
-      def docker_run(state)
+      def parse_container_id(output)
+        unless output.chomp.match(/([0-9a-z]{64})$/)
+          raise ActionFailed, 'Could not parse CONTAINER ID.'
+        end
+        $1
       end
 
       def docker_file
         file = ["FROM #{config[:image]}"]
-        Array(config[:run_command]).each {|cmd| file << "RUN #{cmd}"}
+        Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
         file.join("\n")
       end
 
-      def docker_command(cmd, opts={})
+      def docker_exec(cmd, opts = {})
         cmd = "docker #{cmd}"
         run_command(cmd, opts)
       end
