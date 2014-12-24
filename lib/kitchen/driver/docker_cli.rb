@@ -27,10 +27,15 @@ module Kitchen
     # @author Masashi Terui <marcy9114@gmail.com>
     class DockerCli < Kitchen::Driver::Base
 
-      default_config :command, '/bin/bash'
+      default_config :no_cache, true
+      default_config :command,  'sh -c \'while true; do sleep 1d; done;\''
 
       default_config :image do |driver|
         driver.default_image
+      end
+
+      default_config :platform do |driver|
+        driver.default_platform
       end
 
       def default_image
@@ -41,18 +46,60 @@ module Kitchen
         version ? [platform, version].join(':') : platform
       end
 
+      def default_platform
+        instance.platform.name.split('-').first
+      end
+
       def create(state)
         state[:image] = build unless state[:image]
         state[:container_id] = run(state[:image]) unless state[:container_id]
       end
 
+      def converge(state)
+        provisioner = instance.provisioner
+        provisioner.create_sandbox
+
+        if provisioner.install_command
+          execute(docker_exec_command(
+            "#{state[:container_id]} #{provisioner.install_command}",
+            :tty => true))
+        end
+
+        if provisioner.init_command
+          execute(docker_exec_command(
+            "#{state[:container_id]} #{provisioner.init_command}",
+            :tty => true))
+        end
+
+        cmd = "#{state[:container_id]}"
+        cmd << " rm -rf #{provisioner[:root_path]}"
+        cmd << "&& mkdir #{provisioner[:root_path]}"
+        cmd << "&& cp -rp #{provisioner.sandbox_path}/*"
+        cmd << " #{provisioner[:root_path]}"
+        execute(docker_exec_command(cmd))
+
+        if provisioner.prepare_command
+          execute(docker_exec_command(
+            "#{state[:container_id]} #{provisioner.prepare_command}",
+            :tty => true))
+        end
+
+        if provisioner.run_command
+          execute(docker_exec_command(
+            "#{state[:container_id]} #{provisioner.run_command}",
+            :tty => true))
+        end
+      ensure
+        provisioner && provisioner.cleanup_sandbox
+      end
+
       def build
-        output = docker_exec(docker_build_command, :input => docker_file)
+        output = execute(docker_build_command, :input => docker_file)
         parse_image_id(output)
       end
 
       def run(image)
-        output = docker_exec(docker_run_command(image))
+        output = execute(docker_run_command(image))
         parse_container_id(output)
       end
 
@@ -63,13 +110,21 @@ module Kitchen
       end
 
       def docker_run_command(image)
-        cmd = 'run -d'
+        cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw"
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
         cmd << " #{image} #{config[:command]}"
+      end
+
+      def docker_exec_command(cmd, opt = {})
+        exec_cmd = "exec"
+        exec_cmd << " -t" if opt[:tty]
+        exec_cmd << " -i" if opt[:interactive]
+        # exec_cmd << " <<-EOH\n#{cmd}\nEOH"
+        exec_cmd << " #{cmd}"
       end
 
       def parse_image_id(output)
@@ -88,11 +143,21 @@ module Kitchen
 
       def docker_file
         file = ["FROM #{config[:image]}"]
+        case config[:platform]
+        when 'debian', 'ubuntu'
+          file << 'RUN apt-get update'
+          file << 'RUN apt-get -y install sudo curl'
+        when 'rhel', 'centos'
+          file << 'RUN yum clean all'
+          file << 'RUN yum -y install sudo curl'
+        else
+          # TODO: Support other distribution
+        end
         Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
         file.join("\n")
       end
 
-      def docker_exec(cmd, opts = {})
+      def execute(cmd, opts = {})
         cmd = "docker #{cmd}"
         run_command(cmd, opts)
       end
