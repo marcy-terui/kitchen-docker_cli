@@ -187,3 +187,17 @@ describe Kitchen::Driver::DockerCli, "docker_transfer_command" do
     expect(@docker_cli.docker_transfer_command(provisoner, 'abc')).to eq cmd
   end
 end
+
+describe Kitchen::Driver::DockerCli, "login_command" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new()
+  end
+
+  example do
+    login_command = @docker_cli.login_command(:container_id => 'abc')
+    cmd, *args = login_command.cmd_array
+    cmd = "#{cmd} #{args.join(" ")}"
+    expect(cmd).to eq "docker exec -t -i abc /bin/bash"
+  end
+end

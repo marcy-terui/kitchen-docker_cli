@@ -89,8 +89,17 @@ module Kitchen
       end
 
       def remote_command(state, cmd)
-        p cmd
         execute(docker_exec_command(state[:container_id], cmd))
+      end
+
+      def login_command(state)
+        args = []
+        args << 'exec'
+        args << '-t'
+        args << '-i'
+        args << state[:container_id]
+        args << '/bin/bash'
+        LoginCommand.new(['docker', *args])
       end
 
       def build
