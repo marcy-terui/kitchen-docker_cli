@@ -4,33 +4,158 @@ A Test Kitchen Driver for Docker command line interface.
 
 ## <a name="requirements"></a> Requirements
 
-**TODO:** document any software or library prerequisites that are required to
-use this driver. Implement the `#verify_dependencies` method in your Driver
-class to enforce these requirements in code, if possible.
+- Docker (>= 1.3)  
+This driver uses ```docker exec``` command.
 
 ## <a name="installation"></a> Installation and Setup
 
-Please read the [Driver usage][driver_usage] page for more details.
+```sh
+gem install kitchen-docker_cli
+```
+
+or put ```Gemfile``` in your project directory.
+
+```ruby
+source 'https://rubygems.org'
+
+gem 'kitchen-docker_cli'
+```
+
+and
+
+```sh
+bundle install
+```
+
+If you want to use the ```kithcen exec``` command, should you put Gemfile like this. (as of 25 Dec, 2014)
+
+```ruby
+source 'https://rubygems.org'
+
+gem 'test-kitchen', github: 'test-kitchen/test-kitchen', ref: '237efd17dbcafd0c1334134e3f26b050f2ef49d5'
+gem 'kitchen-docker_cli'
+```
 
 ## <a name="config"></a> Configuration
 
-**TODO:** Write descriptions of all configuration options
+### image
 
-### <a name="config-require-chef-omnibus"></a> require\_chef\_omnibus
+The Docker image's path.
 
-Determines whether or not a Chef [Omnibus package][chef_omnibus_dl] will be
-installed. There are several different behaviors available:
+The default value get from ```platform.name```.
 
-* `true` - the latest release will be installed. Subsequent converges
-  will skip re-installing if chef is present.
-* `latest` - the latest release will be installed. Subsequent converges
-  will always re-install even if chef is present.
-* `<VERSION_STRING>` (ex: `10.24.0`) - the desired version string will
-  be passed the the install.sh script. Subsequent converges will skip if
-  the installed version and the desired version match.
-* `false` or `nil` - no chef is installed.
+Examples:
 
-The default value is unset, or `nil`.
+```yml
+  image: marcy/amzn
+```
+
+### platform
+
+The Docker image's platform.
+
+The default value get from ```platform.name```.
+
+Examples:
+
+```yml
+  platform: centos
+```
+
+### command
+
+The command to be executed at ```docker run```.
+
+The default value is ```sh -c 'while true; do sleep 1d; done;'```.
+
+Examples:
+
+```yml
+  command: /bin/bash
+```
+
+### run_command
+
+Adds ```RUN``` command(s) to ```Dockerfile```.
+
+The default value is ```nil```.
+
+Examples:
+
+```yml
+  run_command:
+    - yum -y install httpd
+    - service httpd start
+```
+
+### no_cache
+
+Not use the cached image on ```docker build```.
+
+The default value is ```true```.
+
+Examples:
+
+```yml
+  no_cache: true
+```
+
+### container_name
+
+Set the name of container to link other container(s).
+
+Examples:
+
+```yml
+  container_name: web
+```
+
+### link
+
+Set ```container_name```(and alias) of other container(s) that connect from the suite container.
+
+Examples:
+
+```yml
+ link: mysql:db
+```
+
+Examples:
+
+```yml
+  links:
+  - mysql:db
+  - redis:kvs
+```
+
+### publish_all
+
+Publish all exposed ports to the host interfaces.  
+This option used to communicate between some containers.
+
+The default value is `false`.
+
+Examples:
+
+```yml
+  publish_all: true
+```
+
+### volume
+
+Adds data volume(s) to the container.
+
+Examples:
+
+```yml
+  volume: /data
+```
+
+```yml
+  volume:
+    - /tmp:/tmp
+    - <%= Dir::pwd %>:/var:rw
+```
 
 ## <a name="development"></a> Development
 
@@ -56,9 +181,9 @@ Created and maintained by [Masashi Terui][author] (<marcy9114@gmail.com>)
 Apache 2.0 (see [LICENSE][license])
 
 
-[author]:           https://github.com/enter-github-user
-[issues]:           https://github.com/enter-github-user/kitchen-docker_cli/issues
-[license]:          https://github.com/enter-github-user/kitchen-docker_cli/blob/master/LICENSE
-[repo]:             https://github.com/enter-github-user/kitchen-docker_cli
+[author]:           https://github.com/marcy-terui
+[issues]:           https://github.com/marcy-terui/kitchen-docker_cli/issues
+[license]:          https://github.com/marcy-terui/kitchen-docker_cli/blob/master/LICENSE
+[repo]:             https://github.com/marcy-terui/kitchen-docker_cli
 [driver_usage]:     http://docs.kitchen-ci.org/drivers/usage
 [chef_omnibus_dl]:  http://www.getchef.com/chef/install/
