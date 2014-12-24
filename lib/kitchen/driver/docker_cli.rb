@@ -55,14 +55,6 @@ module Kitchen
         state[:container_id] = run(state[:image]) unless state[:container_id]
       end
 
-      def docker_transfer_command(provisioner, container_id)
-        cmd = "rm -rf #{provisioner[:root_path]}"
-        cmd << "&& mkdir #{provisioner[:root_path]}"
-        cmd << "&& cp -rp #{provisioner.sandbox_path}/*"
-        cmd << " #{provisioner[:root_path]}"
-        docker_exec_command(container_id, cmd)
-      end
-
       def converge(state)
         provisioner = instance.provisioner
         provisioner.create_sandbox
@@ -133,6 +125,14 @@ module Kitchen
         exec_cmd << " -i" if opt[:interactive]
         # exec_cmd << " <<-EOH\n#{cmd}\nEOH"
         exec_cmd << " #{container_id} #{cmd}"
+      end
+
+      def docker_transfer_command(provisioner, container_id)
+        cmd = "rm -rf #{provisioner[:root_path]}"
+        cmd << " && mkdir #{provisioner[:root_path]}"
+        cmd << " && cp -rp #{provisioner.sandbox_path}/*"
+        cmd << " #{provisioner[:root_path]}/"
+        docker_exec_command(container_id, cmd)
       end
 
       def parse_image_id(output)

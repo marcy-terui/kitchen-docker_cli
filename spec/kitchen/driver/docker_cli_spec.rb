@@ -173,3 +173,17 @@ describe Kitchen::Driver::DockerCli, "docker_exec_command" do
     expect(@docker_cli.docker_exec_command('abc', '/bin/bash', opt)).to eq cmd
   end
 end
+
+describe Kitchen::Driver::DockerCli, "docker_transfer_command" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new()
+  end
+
+  example do
+    provisoner = {:root_path => '/tmp/kitchen'}
+    provisoner.stub(:sandbox_path).and_return('/tmp/sandbox')
+    cmd = "exec abc rm -rf /tmp/kitchen && mkdir /tmp/kitchen && cp -rp /tmp/sandbox/* /tmp/kitchen/"
+    expect(@docker_cli.docker_transfer_command(provisoner, 'abc')).to eq cmd
+  end
+end
