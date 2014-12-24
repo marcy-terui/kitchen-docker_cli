@@ -1,6 +1,47 @@
 require 'spec_helper'
 require 'kitchen/driver/docker_cli'
 
+describe Kitchen::Driver::DockerCli, "default_image" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+  end
+
+  example do
+    platform = double('platform')
+    instance = double('instance')
+    platform.stub(:name).and_return("centos-6.4")
+    instance.stub(:platform).and_return(platform)
+    @docker_cli.stub(:instance).and_return(instance)
+    expect(@docker_cli.default_image).to eq 'centos:centos6'
+  end
+
+  example do
+    platform = double('platform')
+    instance = double('instance')
+    platform.stub(:name).and_return("ubuntu-12.04")
+    instance.stub(:platform).and_return(platform)
+    @docker_cli.stub(:instance).and_return(instance)
+    expect(@docker_cli.default_image).to eq 'ubuntu:12.04'
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "default_platform" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+  end
+
+  example do
+    platform = double('platform')
+    instance = double('instance')
+    platform.stub(:name).and_return("centos-6.4")
+    instance.stub(:platform).and_return(platform)
+    @docker_cli.stub(:instance).and_return(instance)
+    expect(@docker_cli.default_platform).to eq 'centos'
+  end
+end
+
 describe Kitchen::Driver::DockerCli, "create" do
 
   before do
@@ -24,6 +65,127 @@ describe Kitchen::Driver::DockerCli, "create" do
 
     example { expect(state[:image]).to eq "abc" }
     example { expect(state[:container_id]).to eq "xyz" }
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "converge" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+    provisioner = double('provisioner')
+    instance = double('instance')
+    provisioner.stub(:create_sandbox)
+    provisioner.stub(:install_command)
+    provisioner.stub(:init_command)
+    provisioner.stub(:prepare_command)
+    provisioner.stub(:run_command)
+    provisioner.stub(:cleanup_sandbox)
+    instance.stub(:provisioner).and_return(provisioner)
+    @docker_cli.stub(:instance).and_return(instance)
+    @docker_cli.stub(:docker_transfer_command)
+    @docker_cli.stub(:execute)
+  end
+
+  example do
+    expect { @docker_cli.converge(:container_id => 'abc') }.not_to raise_error
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "setup" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+    busser = double('busser')
+    busser.stub(:setup_cmd).and_return('setup')
+    @docker_cli.stub(:busser).and_return(busser)
+    @docker_cli.stub(:execute)
+  end
+
+  example do
+    expect{ @docker_cli.setup(:container_id => 'abc') }.not_to raise_error
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "verify" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+    busser = double('busser')
+    busser.stub(:sync_cmd).and_return('setup')
+    busser.stub(:run_cmd).and_return('setup')
+    @docker_cli.stub(:busser).and_return(busser)
+    @docker_cli.stub(:execute)
+  end
+
+  example do
+    expect{ @docker_cli.verify(:container_id => 'abc') }.not_to raise_error
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "destroy" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+  end
+
+  example do
+    expect{ @docker_cli.destroy(:container_id => 'abc') }.not_to raise_error
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "remote_command" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+    @docker_cli.stub(:execute)
+  end
+
+  example do
+    opt = {:container_id => 'abc'}
+    expect{ @docker_cli.remote_command(opt, "test") }.not_to raise_error
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "login_command" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new()
+  end
+
+  example do
+    login_command = @docker_cli.login_command(:container_id => 'abc')
+    cmd, *args = login_command.cmd_array
+    cmd = "#{cmd} #{args.join(" ")}"
+    expect(cmd).to eq "docker exec -t -i abc /bin/bash"
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "build" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+    @docker_cli.stub(:docker_build_command)
+    @docker_cli.stub(:docker_file)
+    @docker_cli.stub(:parse_image_id)
+    @docker_cli.stub(:execute)
+  end
+
+  example do
+    expect{ @docker_cli.build }.not_to raise_error
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "run" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new
+    @docker_cli.stub(:docker_run_command)
+    @docker_cli.stub(:parse_container_id)
+    @docker_cli.stub(:execute)
+  end
+
+  example do
+    expect{ @docker_cli.run('test') }.not_to raise_error
   end
 end
 
@@ -91,10 +253,13 @@ describe Kitchen::Driver::DockerCli, "parse_image_id" do
   end
 
   example do
-    expect do
-      output = "Successfully built abc123def456\n"
-      @docker_cli.parse_image_id(output).to eq "abc123def456"
-    end
+    expect { @docker_cli.parse_image_id("Successfully built abc123def456\n").to eq "abc123def456" }
+  end
+  example do
+    expect { @docker_cli.parse_image_id("Successfully built abc123\n") }.to raise_error('Could not parse IMAGE ID.')
+  end
+  example do
+    expect { @docker_cli.parse_image_id("Error abc123def456\n") }.to raise_error('Could not parse IMAGE ID.')
   end
 
 end
@@ -113,6 +278,15 @@ describe Kitchen::Driver::DockerCli, "parse_container_id" do
       output << "abcd1234efgh5678\n"
       @docker_cli.parse_container_id(output).to eq output.chomp
     end
+  end
+
+  example do
+    expect do
+      output = "abcd1234efgh5678"
+      output << "abcd1234efgh5678"
+      output << "abcd1234efgh5678\n"
+      @docker_cli.parse_container_id(output)
+    end.to raise_error('Could not parse CONTAINER ID.')
   end
 
 end
@@ -185,19 +359,5 @@ describe Kitchen::Driver::DockerCli, "docker_transfer_command" do
     provisoner.stub(:sandbox_path).and_return('/tmp/sandbox')
     cmd = "exec abc rm -rf /tmp/kitchen && mkdir /tmp/kitchen && cp -rp /tmp/sandbox/* /tmp/kitchen/"
     expect(@docker_cli.docker_transfer_command(provisoner, 'abc')).to eq cmd
-  end
-end
-
-describe Kitchen::Driver::DockerCli, "login_command" do
-
-  before do
-    @docker_cli = Kitchen::Driver::DockerCli.new()
-  end
-
-  example do
-    login_command = @docker_cli.login_command(:container_id => 'abc')
-    cmd, *args = login_command.cmd_array
-    cmd = "#{cmd} #{args.join(" ")}"
-    expect(cmd).to eq "docker exec -t -i abc /bin/bash"
   end
 end
