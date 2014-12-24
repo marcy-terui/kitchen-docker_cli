@@ -93,6 +93,27 @@ module Kitchen
         provisioner && provisioner.cleanup_sandbox
       end
 
+      def setup(state)
+        if busser.setup_cmd
+          execute(docker_exec_command(
+          "#{state[:container_id]} #{instance.busser.setup_cmd}",
+          :tty => true))
+        end
+      end
+
+      def verify(state)
+        if busser.sync_cmd
+          execute(docker_exec_command(
+          "#{state[:container_id]} #{instance.busser.sync_cmd}",
+          :tty => true))
+        end
+        if busser.run_cmd
+          execute(docker_exec_command(
+          "#{state[:container_id]} #{instance.busser.run_cmd}",
+          :tty => true))
+        end
+      end
+
       def build
         output = execute(docker_build_command, :input => docker_file)
         parse_image_id(output)
