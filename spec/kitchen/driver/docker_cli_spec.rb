@@ -78,9 +78,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     end
 
     example do
-      cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw"
-      cmd << ' --name web -P -p 80:8080 -p 22:2222'
-      cmd << ' -v /dev:/dev --link mysql:db test /bin/bash'
+      cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw --name web -P -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
@@ -167,11 +165,11 @@ describe Kitchen::Driver::DockerCli, "docker_exec_command" do
 
   example do
     cmd = 'exec abc /bin/bash'
-    expect(@docker_cli.docker_exec_command('abc /bin/bash')).to eq cmd
+    expect(@docker_cli.docker_exec_command('abc','/bin/bash')).to eq cmd
   end
   example do
     cmd = 'exec -t -i abc /bin/bash'
     opt = {:interactive => true, :tty => true}
-    expect(@docker_cli.docker_exec_command('abc /bin/bash', opt)).to eq cmd
+    expect(@docker_cli.docker_exec_command('abc', '/bin/bash', opt)).to eq cmd
   end
 end

@@ -28,7 +28,7 @@ module Kitchen
     class DockerCli < Kitchen::Driver::Base
 
       default_config :no_cache, true
-      default_config :command,  'sh -c \'while true; do sleep 1d; done;\''
+      default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
 
       default_config :image do |driver|
         driver.default_image
@@ -55,63 +55,50 @@ module Kitchen
         state[:container_id] = run(state[:image]) unless state[:container_id]
       end
 
+      def docker_transfer_command(provisioner, container_id)
+        cmd = "rm -rf #{provisioner[:root_path]}"
+        cmd << "&& mkdir #{provisioner[:root_path]}"
+        cmd << "&& cp -rp #{provisioner.sandbox_path}/*"
+        cmd << " #{provisioner[:root_path]}"
+        docker_exec_command(container_id, cmd)
+      end
+
       def converge(state)
         provisioner = instance.provisioner
         provisioner.create_sandbox
 
-        if provisioner.install_command
-          execute(docker_exec_command(
-            "#{state[:container_id]} #{provisioner.install_command}",
-            :tty => true))
-        end
+        execute(docker_exec_command(state[:container_id], provisioner.install_command, :tty => true)) if provisioner.install_command
+        execute(docker_exec_command(state[:container_id], provisioner.init_command, :tty => true)) if provisioner.init_command
+        execute(docker_transfer_command(provisioner, state[:container_id]))
+        execute(docker_exec_command(state[:container_id], provisioner.prepare_command, :tty => true)) if provisioner.prepare_command
+        execute(docker_exec_command(state[:container_id], provisioner.run_command, :tty => true)) if provisioner.run_command
 
-        if provisioner.init_command
-          execute(docker_exec_command(
-            "#{state[:container_id]} #{provisioner.init_command}",
-            :tty => true))
-        end
-
-        cmd = "#{state[:container_id]}"
-        cmd << " rm -rf #{provisioner[:root_path]}"
-        cmd << "&& mkdir #{provisioner[:root_path]}"
-        cmd << "&& cp -rp #{provisioner.sandbox_path}/*"
-        cmd << " #{provisioner[:root_path]}"
-        execute(docker_exec_command(cmd))
-
-        if provisioner.prepare_command
-          execute(docker_exec_command(
-            "#{state[:container_id]} #{provisioner.prepare_command}",
-            :tty => true))
-        end
-
-        if provisioner.run_command
-          execute(docker_exec_command(
-            "#{state[:container_id]} #{provisioner.run_command}",
-            :tty => true))
-        end
       ensure
         provisioner && provisioner.cleanup_sandbox
       end
 
       def setup(state)
         if busser.setup_cmd
-          execute(docker_exec_command(
-          "#{state[:container_id]} #{instance.busser.setup_cmd}",
-          :tty => true))
+          execute(docker_exec_command(state[:container_id], busser.setup_cmd, :tty => true))
         end
       end
 
       def verify(state)
         if busser.sync_cmd
-          execute(docker_exec_command(
-          "#{state[:container_id]} #{instance.busser.sync_cmd}",
-          :tty => true))
+          execute(docker_exec_command(state[:container_id], busser.sync_cmd, :tty => true))
         end
         if busser.run_cmd
-          execute(docker_exec_command(
-          "#{state[:container_id]} #{instance.busser.run_cmd}",
-          :tty => true))
+          execute(docker_exec_command(state[:container_id], busser.run_cmd, :tty => true))
         end
+      end
+
+      def destroy(state)
+        execute("rm -f #{state[:container_id]}") rescue false
+      end
+
+      def remote_command(state, cmd)
+        p cmd
+        execute(docker_exec_command(state[:container_id], cmd))
       end
 
       def build
@@ -140,12 +127,12 @@ module Kitchen
         cmd << " #{image} #{config[:command]}"
       end
 
-      def docker_exec_command(cmd, opt = {})
+      def docker_exec_command(container_id, cmd, opt = {})
         exec_cmd = "exec"
         exec_cmd << " -t" if opt[:tty]
         exec_cmd << " -i" if opt[:interactive]
         # exec_cmd << " <<-EOH\n#{cmd}\nEOH"
-        exec_cmd << " #{cmd}"
+        exec_cmd << " #{container_id} #{cmd}"
       end
 
       def parse_image_id(output)
