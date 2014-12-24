@@ -38,6 +38,23 @@ gem 'kitchen-docker_cli'
 
 ## <a name="config"></a> Configuration
 
+At first, put your ```.kithcen(.local).yml``` like this.
+
+```yml
+---
+driver:
+  name: docker_cli
+
+platforms:
+  - name: ubuntu-12.04
+  - name: centos-6.4
+
+suites:
+  - name: default
+    run_list:
+    attributes:
+```
+
 ### image
 
 The Docker image's path.
@@ -123,9 +140,9 @@ Examples:
 Examples:
 
 ```yml
-  links:
-  - mysql:db
-  - redis:kvs
+  link:
+    - mysql:db
+    - redis:kvs
 ```
 
 ### publish_all
