@@ -196,7 +196,7 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
   end
 
   context 'default' do
-    let(:config)       { Hash.new }
+    let(:config)       { {:no_cache => true} }
 
     example do
       expect(@docker_cli.docker_build_command).to eq 'build --no-cache -'
@@ -204,7 +204,7 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
   end
 
   context 'nocache' do
-    let(:config)       { {:no_cache => false} }
+    let(:config)       { Hash.new }
 
     example do
       expect(@docker_cli.docker_build_command).to eq 'build -'
