@@ -1,3 +1,7 @@
+## 0.2.0.beta
+
+* Add ```privileged``` option
+
 ## 0.1.1.alpha
 
 * Change ```no_cache``` option's default value to ```false```

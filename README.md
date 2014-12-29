@@ -112,12 +112,24 @@ Examples:
 
 Not use the cached image on ```docker build```.
 
-The default value is ```true```.
+The default value is ```false```.
 
 Examples:
 
 ```yml
   no_cache: true
+```
+
+### privileged
+
+Give extended privileges to the suite container.
+
+The default value is ```false```.
+
+Examples:
+
+```yml
+  privileged: true
 ```
 
 ### container_name

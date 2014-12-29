@@ -233,6 +233,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
         :command => '/bin/bash',
         :container_name => 'web',
         :publish_all => true,
+        :privileged => true,
         :publish => ['80:8080', '22:2222'],
         :volume => '/dev:/dev',
         :link => 'mysql:db'
@@ -240,7 +241,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     end
 
     example do
-      cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw --name web -P -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
+      cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw --name web -P --privileged -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end

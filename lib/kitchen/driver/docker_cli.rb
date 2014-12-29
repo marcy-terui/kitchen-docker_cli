@@ -29,6 +29,7 @@ module Kitchen
 
       default_config :no_cache, false
       default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
+      default_config :privileged, false
 
       default_config :image do |driver|
         driver.default_image
@@ -122,6 +123,7 @@ module Kitchen
         cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw"
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
+        cmd << ' --privileged' if config[:privileged]
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
