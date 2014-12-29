@@ -27,7 +27,7 @@ module Kitchen
     # @author Masashi Terui <marcy9114@gmail.com>
     class DockerCli < Kitchen::Driver::Base
 
-      default_config :no_cache, true
+      default_config :no_cache, false
       default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
 
       default_config :image do |driver|
