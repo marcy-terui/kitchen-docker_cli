@@ -1,4 +1,4 @@
-# <a name="title"></a> Kitchen::DockerCli [![Gem Version](https://badge.fury.io/rb/kitchen-docker_cli.svg)](http://badge.fury.io/rb/kitchen-docker_cli) [![Build Status](https://travis-ci.org/marcy-terui/kitchen-docker_cli.svg?branch=master)](https://travis-ci.org/marcy-terui/kitchen-docker_cli) [![Coverage Status](https://coveralls.io/repos/marcy-terui/kitchen-docker_cli/badge.png)](https://coveralls.io/r/marcy-terui/kitchen-docker_cli) 
+# <a name="title"></a> Kitchen::DockerCli [![Gem Version](https://badge.fury.io/rb/kitchen-docker_cli.svg)](http://badge.fury.io/rb/kitchen-docker_cli) [![Build Status](https://travis-ci.org/marcy-terui/kitchen-docker_cli.svg?branch=master)](https://travis-ci.org/marcy-terui/kitchen-docker_cli) [![Coverage Status](https://coveralls.io/repos/marcy-terui/kitchen-docker_cli/badge.png)](https://coveralls.io/r/marcy-terui/kitchen-docker_cli)
 A Test Kitchen Driver for Docker command line interface.
 
 This plugin is created with only Docker CLI functions.  
@@ -8,6 +8,8 @@ Therefore, we can test with an environment that has no extra software such as ``
 
 - Docker (>= 1.3)  
 This driver uses ```docker exec``` command.
+
+- tar (GNU Tar)  
 
 ## <a name="installation"></a> Installation and Setup
 
