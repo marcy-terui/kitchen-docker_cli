@@ -62,7 +62,8 @@ module Kitchen
 
         execute(docker_exec_command(state[:container_id], provisioner.install_command, :tty => true)) if provisioner.install_command
         execute(docker_exec_command(state[:container_id], provisioner.init_command, :tty => true)) if provisioner.init_command
-        execute(docker_transfer_command(provisioner, state[:container_id]))
+        execute(docker_pre_transfer_command(provisioner, state[:container_id]))
+        run_command(docker_transfer_command(provisioner, state[:container_id]))
         execute(docker_exec_command(state[:container_id], provisioner.prepare_command, :tty => true)) if provisioner.prepare_command
         execute(docker_exec_command(state[:container_id], provisioner.run_command, :tty => true)) if provisioner.run_command
 
@@ -113,6 +114,10 @@ module Kitchen
         parse_container_id(output)
       end
 
+      def docker_command(cmd)
+        "docker #{cmd}"
+      end
+
       def docker_build_command
         cmd = 'build'
         cmd << ' --no-cache' if config[:no_cache]
@@ -120,7 +125,7 @@ module Kitchen
       end
 
       def docker_run_command(image)
-        cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw"
+        cmd = "run -d"
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
         cmd << ' --privileged' if config[:privileged]
@@ -138,12 +143,16 @@ module Kitchen
         exec_cmd << " #{container_id} #{cmd}"
       end
 
-      def docker_transfer_command(provisioner, container_id)
-        cmd = "rm -rf #{provisioner[:root_path]}"
-        cmd << " && mkdir #{provisioner[:root_path]}"
-        cmd << " && cp -rp #{provisioner.sandbox_path}/*"
-        cmd << " #{provisioner[:root_path]}/"
+      def docker_pre_transfer_command(provisioner, container_id)
+        cmd = "mkdir -p #{provisioner[:root_path]}"
+        cmd << " && rm -rf #{provisioner[:root_path]}/*"
         docker_exec_command(container_id, cmd)
+      end
+
+      def docker_transfer_command(provisioner, container_id)
+        remote_cmd = "tar x -C #{provisioner[:root_path]}"
+        local_cmd  = "cd #{provisioner.sandbox_path} && tar cf - ./"
+        "#{local_cmd} | #{docker_command(docker_exec_command(container_id, remote_cmd, :interactive => true))}"
       end
 
       def parse_image_id(output)
@@ -165,10 +174,10 @@ module Kitchen
         case config[:platform]
         when 'debian', 'ubuntu'
           file << 'RUN apt-get update'
-          file << 'RUN apt-get -y install sudo curl'
+          file << 'RUN apt-get -y install sudo curl tar'
         when 'rhel', 'centos'
           file << 'RUN yum clean all'
-          file << 'RUN yum -y install sudo curl'
+          file << 'RUN yum -y install sudo curl tar'
         else
           # TODO: Support other distribution
         end
@@ -177,8 +186,7 @@ module Kitchen
       end
 
       def execute(cmd, opts = {})
-        cmd = "docker #{cmd}"
-        run_command(cmd, opts)
+        run_command(docker_command(cmd), opts)
       end
 
 

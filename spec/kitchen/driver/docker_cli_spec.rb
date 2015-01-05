@@ -83,7 +83,9 @@ describe Kitchen::Driver::DockerCli, "converge" do
     instance.stub(:provisioner).and_return(provisioner)
     @docker_cli.stub(:instance).and_return(instance)
     @docker_cli.stub(:docker_transfer_command)
+    @docker_cli.stub(:docker_pre_transfer_command)
     @docker_cli.stub(:execute)
+    @docker_cli.stub(:run_command)
   end
 
   example do
@@ -222,7 +224,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     let(:config)       { {:command => '/bin/bash'} }
 
     example do
-      cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw test /bin/bash"
+      cmd = "run -d test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
@@ -241,7 +243,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     end
 
     example do
-      cmd = "run -d -v #{Dir::tmpdir}:/tmp:rw --name web -P --privileged -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
+      cmd = "run -d --name web -P --privileged -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
@@ -308,7 +310,7 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
     example do
       ret = "FROM centos/centos6\n"
       ret << "RUN yum clean all\n"
-      ret << "RUN yum -y install sudo curl"
+      ret << "RUN yum -y install sudo curl tar"
       expect(@docker_cli.send(:docker_file)).to eq ret
     end
   end
@@ -325,10 +327,21 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
       ret = "FROM ubuntu/12.04\n"
       ret = "FROM ubuntu/12.04\n"
       ret << "RUN apt-get update\n"
-      ret << "RUN apt-get -y install sudo curl\n"
+      ret << "RUN apt-get -y install sudo curl tar\n"
       ret << "RUN test\nRUN test2"
       expect(@docker_cli.send(:docker_file)).to eq ret
     end
+  end
+end
+
+describe Kitchen::Driver::DockerCli, "docker_command" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new()
+  end
+
+  example do
+    expect(@docker_cli.docker_command('exec')).to eq "docker exec"
   end
 end
 
@@ -349,6 +362,19 @@ describe Kitchen::Driver::DockerCli, "docker_exec_command" do
   end
 end
 
+describe Kitchen::Driver::DockerCli, "docker_pre_transfer_command" do
+
+  before do
+    @docker_cli = Kitchen::Driver::DockerCli.new()
+  end
+
+  example do
+    provisoner = {:root_path => '/tmp/kitchen'}
+    cmd = "exec abc mkdir -p /tmp/kitchen && rm -rf /tmp/kitchen/*"
+    expect(@docker_cli.docker_pre_transfer_command(provisoner, 'abc')).to eq cmd
+  end
+end
+
 describe Kitchen::Driver::DockerCli, "docker_transfer_command" do
 
   before do
@@ -358,7 +384,7 @@ describe Kitchen::Driver::DockerCli, "docker_transfer_command" do
   example do
     provisoner = {:root_path => '/tmp/kitchen'}
     provisoner.stub(:sandbox_path).and_return('/tmp/sandbox')
-    cmd = "exec abc rm -rf /tmp/kitchen && mkdir /tmp/kitchen && cp -rp /tmp/sandbox/* /tmp/kitchen/"
+    cmd = "cd /tmp/sandbox && tar cf - ./ | docker exec -i abc tar x -C /tmp/kitchen"
     expect(@docker_cli.docker_transfer_command(provisoner, 'abc')).to eq cmd
   end
 end
