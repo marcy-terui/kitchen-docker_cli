@@ -1,6 +1,6 @@
 ## 0.3.0
 
-* Use docker exec command to transfer the test-kitchen's sandbox [#1][] 
+* Use docker exec command to transfer the test-kitchen's sandbox
 
 ## 0.2.0.beta
 
