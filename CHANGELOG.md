@@ -1,3 +1,7 @@
+## 0.3.1
+
+* Change dependency version of `test-kitchen`
+
 ## 0.3.0
 
 * Use docker exec command to transfer the test-kitchen's sandbox

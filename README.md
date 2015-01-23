@@ -6,6 +6,8 @@ Therefore, we can test with an environment that has no extra software such as ``
 
 ## <a name="requirements"></a> Requirements
 
+- Test-Kitchen (>= 1.3)
+
 - Docker (>= 1.3)  
 This driver uses ```docker exec``` command.
 
@@ -29,15 +31,6 @@ and
 
 ```sh
 bundle install
-```
-
-If you want to use the ```kithcen exec``` command, should you put Gemfile like this. (as of 25 Dec, 2014)
-
-```ruby
-source 'https://rubygems.org'
-
-gem 'test-kitchen', github: 'test-kitchen/test-kitchen', ref: '237efd17dbcafd0c1334134e3f26b050f2ef49d5'
-gem 'kitchen-docker_cli'
 ```
 
 ## <a name="config"></a> Configuration
