@@ -170,19 +170,23 @@ module Kitchen
       end
 
       def docker_file
-        file = ["FROM #{config[:image]}"]
-        case config[:platform]
-        when 'debian', 'ubuntu'
-          file << 'RUN apt-get update'
-          file << 'RUN apt-get -y install sudo curl tar'
-        when 'rhel', 'centos'
-          file << 'RUN yum clean all'
-          file << 'RUN yum -y install sudo curl tar'
+        if config[:dockerfile]
+          file = IO.read(File.expand_path(config[:dockerfile]))
         else
-          # TODO: Support other distribution
+          file = ["FROM #{config[:image]}"]
+          case config[:platform]
+          when 'debian', 'ubuntu'
+            file << 'RUN apt-get update'
+            file << 'RUN apt-get -y install sudo curl tar'
+          when 'rhel', 'centos'
+            file << 'RUN yum clean all'
+            file << 'RUN yum -y install sudo curl tar'
+          else
+            # TODO: Support other distribution
+          end
+          Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
+          file.join("\n")
         end
-        Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
-        file.join("\n")
       end
 
       def execute(cmd, opts = {})
