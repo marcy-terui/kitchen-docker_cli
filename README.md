@@ -146,8 +146,6 @@ Examples:
  link: mysql:db
 ```
 
-Examples:
-
 ```yml
   link:
     - mysql:db
@@ -188,9 +186,8 @@ Examples:
 Create test image using a supplied dockerfile, instead of the default dockerfile created.
 For best results, please:
   - Ensure Package Repositories are updated
-  - Ensure Dockerfile installs sudo, curl, openssh-server, and tar
+  - Ensure Dockerfile installs sudo, curl and tar
   - If Ubuntu/Debian, Set DEBIAN_FRONTEND to noninteractive
-  - If Ubuntu/Debian, install openssh-server
 
 ```yml
   dockerfile: my/dockerfile
