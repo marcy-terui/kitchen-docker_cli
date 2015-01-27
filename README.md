@@ -183,10 +183,10 @@ Examples:
 
 ### dockerfile
 
-Create test image using a supplied dockerfile, instead of the default dockerfile created.
-For best results, please:
+Create test image using a supplied dockerfile, instead of the default dockerfile created.  
+For best results, please:  
   - Ensure Package Repositories are updated
-  - Ensure Dockerfile installs sudo, curl and tar
+  - Ensure Dockerfile installs sudo, curl, and tar
   - If Ubuntu/Debian, Set DEBIAN_FRONTEND to noninteractive
 
 ```yml
