@@ -238,12 +238,14 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
         :privileged => true,
         :publish => ['80:8080', '22:2222'],
         :volume => '/dev:/dev',
-        :link => 'mysql:db'
+        :link => 'mysql:db',
+        :memory_limit => '256m',
+        :cpu_shares => 512
       }
     end
 
     example do
-      cmd = "run -d --name web -P --privileged -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
+      cmd = "run -d --name web -P -m 256m -c 512 --privileged -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end

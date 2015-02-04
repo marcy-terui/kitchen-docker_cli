@@ -128,6 +128,8 @@ module Kitchen
         cmd = "run -d"
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
+        cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
+        cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]
         cmd << ' --privileged' if config[:privileged]
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }

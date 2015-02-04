@@ -1,3 +1,8 @@
+## 0.5.0
+
+* Add `memory_limit` option
+* Add `cpu_shares` option
+
 ## 0.4.0
 
 * Pull request [#2][]: Add custom `Dockerfile` support ([@grubernaut][])

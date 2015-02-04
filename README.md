@@ -193,6 +193,23 @@ For best results, please:
   dockerfile: my/dockerfile
 ```
 
+### memory_limit
+
+Constrain the memory available.
+
+```yml
+  memory_limit: 256m
+```
+
+### cpu_shares
+
+Change the priority of CPU Time.  
+This option with value 0 indicates that the running container has access to all 1024 (default) CPU shares.
+
+```yml
+  cpu_shares: 512
+```
+
 ## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]
