@@ -131,6 +131,7 @@ module Kitchen
         cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
         cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]
         cmd << ' --privileged' if config[:privileged]
+        cmd << " --net #{config[:network]}" if config[:network]
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
         Array(config[:link]).each { |link| cmd << " --link #{link}" }

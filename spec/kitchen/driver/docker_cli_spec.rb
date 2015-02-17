@@ -240,12 +240,13 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
         :volume => '/dev:/dev',
         :link => 'mysql:db',
         :memory_limit => '256m',
-        :cpu_shares => 512
+        :cpu_shares => 512,
+        :network => 'none'
       }
     end
 
     example do
-      cmd = "run -d --name web -P -m 256m -c 512 --privileged -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
+      cmd = "run -d --name web -P -m 256m -c 512 --privileged --net none -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
@@ -322,7 +323,8 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
       {
         image: "ubuntu/12.04",
         platform: "ubuntu",
-        run_command: ["test", "test2"]
+        run_command: ["test", "test2"],
+        environment: {"test" => "hoge"}
       }
     }
     example do
@@ -330,7 +332,9 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
       ret = "FROM ubuntu/12.04\n"
       ret << "RUN apt-get update\n"
       ret << "RUN apt-get -y install sudo curl tar\n"
-      ret << "RUN test\nRUN test2"
+      ret << "RUN test\n"
+      ret << "RUN test2\n"
+      ret << "ENV test=hoge"
       expect(@docker_cli.send(:docker_file)).to eq ret
     end
   end
