@@ -9,7 +9,7 @@ Therefore, we can test with an environment that has no extra software such as ``
 - Test-Kitchen (>= 1.3)
 
 - Docker (>= 1.3)
-This driver uses ```docker exec``` command.
+This driver uses `docker exec` command.
 
 - tar (GNU Tar)
 
@@ -19,7 +19,7 @@ This driver uses ```docker exec``` command.
 gem install kitchen-docker_cli
 ```
 
-or put ```Gemfile``` in your project directory.
+or put `Gemfile` in your project directory.
 
 ```ruby
 source 'https://rubygems.org'
@@ -35,7 +35,7 @@ bundle install
 
 ## <a name="config"></a> Configuration
 
-At first, put your ```.kithcen(.local).yml``` like this.
+At first, put your `.kithcen(.local).yml` like this.
 
 ```yml
 ---
@@ -56,7 +56,7 @@ suites:
 
 The Docker image's path.
 
-The default value get from ```platform.name```.
+The default value get from `platform.name`.
 
 Examples:
 
@@ -68,7 +68,7 @@ Examples:
 
 The Docker image's platform.
 
-The default value get from ```platform.name```.
+The default value get from `platform.name`.
 
 Examples:
 
@@ -78,9 +78,9 @@ Examples:
 
 ### command
 
-The command to be executed at ```docker run```.
+The command to be executed at `docker run`.
 
-The default value is ```sh -c 'while true; do sleep 1d; done;'```.
+The default value is `sh -c 'while true; do sleep 1d; done;'`.
 
 Examples:
 
@@ -90,9 +90,9 @@ Examples:
 
 ### run_command
 
-Adds ```RUN``` command(s) to ```Dockerfile```.
+Adds `RUN` command(s) to `Dockerfile`.
 
-The default value is ```nil```.
+The default value is `nil`.
 
 Examples:
 
@@ -102,11 +102,25 @@ Examples:
     - service httpd start
 ```
 
+### environment
+
+Adds `ENV` command(s) to `Dockerfile`.
+
+The default value is `nil`.
+
+Examples:
+
+```yml
+environment:
+  http_proxy: http://proxy.example.com:8080/
+  LANG: ja_JP.UTF-8
+```
+
 ### no_cache
 
-Not use the cached image on ```docker build```.
+Not use the cached image on `docker build`.
 
-The default value is ```false```.
+The default value is `false`.
 
 Examples:
 
@@ -118,7 +132,7 @@ Examples:
 
 Give extended privileges to the suite container.
 
-The default value is ```false```.
+The default value is `false`.
 
 Examples:
 
@@ -136,9 +150,23 @@ Examples:
   container_name: web
 ```
 
+### network
+
+Set the Network mode for the container.  
+- `bridge`: creates a new network stack for the container on the docker bridge
+- `none`: no networking for this container
+- `container:<name|id>`: reuses another container network stack
+- `host`: use the host network stack inside the container
+
+Examples:
+
+```yml
+  network: host
+```
+
 ### link
 
-Set ```container_name```(and alias) of other container(s) that connect from the suite container.
+Set `container_name`(and alias) of other container(s) that connect from the suite container.
 
 Examples:
 
@@ -150,6 +178,24 @@ Examples:
   link:
     - mysql:db
     - redis:kvs
+```
+
+### publish
+
+Publish a container's port or a range of ports to the host.
+
+The default value is `nil`.
+
+Examples:
+
+```yml
+  publish: 80
+```
+
+```yml
+  publish:
+    - 80:8080
+    - 22:2222
 ```
 
 ### publish_all
