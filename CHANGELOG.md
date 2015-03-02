@@ -1,3 +1,7 @@
+## 0.7.0
+
+* Add `hostname` option
+
 ## 0.6.0
 
 * Pull request [#4][]: allow setup environment variables(add environment option) ([@hd-deman][])

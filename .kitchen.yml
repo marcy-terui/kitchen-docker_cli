@@ -2,6 +2,9 @@
 driver:
   name: docker_cli
 
+driver_config:
+  hostname: example.local
+
 platforms:
   - name: ubuntu-12.04
   - name: centos-6.4

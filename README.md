@@ -164,6 +164,16 @@ Examples:
   network: host
 ```
 
+### hostname
+
+Set hostname to container.
+
+Examples:
+
+```yml
+  hostname: example.local
+```
+
 ### link
 
 Set `container_name`(and alias) of other container(s) that connect from the suite container.

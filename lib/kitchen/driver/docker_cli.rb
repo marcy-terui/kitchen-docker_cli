@@ -132,6 +132,7 @@ module Kitchen
         cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]
         cmd << ' --privileged' if config[:privileged]
         cmd << " --net #{config[:network]}" if config[:network]
+        cmd << " -h #{config[:hostname]}" if config[:hostname]
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
