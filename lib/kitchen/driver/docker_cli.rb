@@ -125,7 +125,7 @@ module Kitchen
       end
 
       def docker_run_command(image)
-        cmd = "run -d"
+        cmd = "run -d -t"
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
         cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
@@ -182,7 +182,7 @@ module Kitchen
           when 'debian', 'ubuntu'
             file << 'RUN apt-get update'
             file << 'RUN apt-get -y install sudo curl tar'
-          when 'rhel', 'centos'
+          when 'rhel', 'centos', 'fedora'
             file << 'RUN yum clean all'
             file << 'RUN yum -y install sudo curl tar'
           else

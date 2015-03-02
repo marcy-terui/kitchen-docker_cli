@@ -224,7 +224,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     let(:config)       { {:command => '/bin/bash'} }
 
     example do
-      cmd = "run -d test /bin/bash"
+      cmd = "run -d -t test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
@@ -247,7 +247,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     end
 
     example do
-      cmd = "run -d --name web -P -m 256m -c 512 --privileged --net none -h example.local -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
+      cmd = "run -d -t --name web -P -m 256m -c 512 --privileged --net none -h example.local -p 80:8080 -p 22:2222 -v /dev:/dev --link mysql:db test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end

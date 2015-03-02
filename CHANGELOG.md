@@ -1,3 +1,7 @@
+## 0.7.1
+
+* Fix error on `fedora`
+
 ## 0.7.0
 
 * Add `hostname` option
