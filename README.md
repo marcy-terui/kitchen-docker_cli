@@ -174,6 +174,17 @@ Examples:
   hostname: example.local
 ```
 
+### instance_host_name
+Use instance name to hostname.
+
+The default value is `false`.
+
+Examples:
+
+```yml
+  instance_host_name: true
+```
+
 ### link
 
 Set `container_name`(and alias) of other container(s) that connect from the suite container.

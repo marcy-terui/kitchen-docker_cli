@@ -218,6 +218,9 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)
+    instance = double('instance')
+    instance.stub(:name).and_return("default-centos-66")
+    @docker_cli.stub(:instance).and_return(instance)
   end
 
   context 'default' do
@@ -225,6 +228,15 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
 
     example do
       cmd = "run -d -t test /bin/bash"
+      expect(@docker_cli.docker_run_command('test')).to eq cmd
+    end
+  end
+
+  context 'instance_host_name' do
+    let(:config)       { {:command => '/bin/bash', :instance_host_name => true} }
+
+    example do
+      cmd = "run -d -t -h default-centos-66 test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
@@ -242,7 +254,8 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
         :memory_limit => '256m',
         :cpu_shares => 512,
         :network => 'none',
-        :hostname => 'example.local'
+        :hostname => 'example.local',
+        :instance_host_name => true
       }
     end
 

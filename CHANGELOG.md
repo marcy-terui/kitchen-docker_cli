@@ -1,3 +1,7 @@
+## 0.8.0
+
+* Add `instance_host_name` option
+
 ## 0.7.1
 
 * Fix error on `fedora`
