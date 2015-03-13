@@ -37,7 +37,7 @@ bundle install
 
 ## <a name="config"></a> Configuration
 
-At first, put your `.kithcen(.local).yml` like this.
+At first, put your `.kitchen(.local).yml` like this.
 
 ```yml
 ---
