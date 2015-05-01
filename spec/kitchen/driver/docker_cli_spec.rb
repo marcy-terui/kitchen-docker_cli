@@ -156,7 +156,7 @@ describe Kitchen::Driver::DockerCli, "login_command" do
 
   example do
     login_command = @docker_cli.login_command(:container_id => 'abc')
-    cmd, *args = login_command.cmd_array
+    cmd, *args, _ = login_command.exec_args
     cmd = "#{cmd} #{args.join(" ")}"
     expect(cmd).to eq "docker exec -t -i abc /bin/bash"
   end

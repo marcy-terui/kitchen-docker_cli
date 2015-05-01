@@ -27,10 +27,13 @@ module Kitchen
     # @author Masashi Terui <marcy9114@gmail.com>
     class DockerCli < Kitchen::Driver::Base
 
+      include ShellOut
+
       default_config :no_cache, false
       default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
       default_config :privileged, false
       default_config :instance_host_name, false
+      default_config :transport, "docker_cli"
 
       default_config :image do |driver|
         driver.default_image
@@ -102,7 +105,7 @@ module Kitchen
         args << '-i'
         args << state[:container_id]
         args << '/bin/bash'
-        LoginCommand.new(['docker', *args])
+        LoginCommand.new('docker', args)
       end
 
       def build
