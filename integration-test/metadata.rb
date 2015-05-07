@@ -1,0 +1,7 @@
+name             'integration-test'
+maintainer       'Masashi Terui'
+maintainer_email 'marcy9114@gmail.com'
+license          'Apache 2.0'
+description      'Installs/Configures integration-test'
+long_description 'Installs/Configures integration-test'
+version          '0.1.0'
