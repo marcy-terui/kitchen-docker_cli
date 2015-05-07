@@ -1,0 +1,22 @@
+---
+driver:
+  name: docker_cli
+
+transport:
+  name: docker_cli
+
+driver_config:
+  hostname: example.local
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-12.04
+  - name: centos-6.4
+
+suites:
+  - name: default
+    run_list:
+      - recipe[integration-test::default]
+    attributes:

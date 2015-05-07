@@ -1,0 +1,13 @@
+---
+machine:
+  ruby:
+    version: 2.1.5
+  services:
+    - docker
+dependencies:
+  override:
+    - bundle install --path=vendor/bundle
+test:
+  override:
+    - bundle exec kitchen test:
+        pwd: integration-test
