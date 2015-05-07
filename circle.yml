@@ -4,9 +4,11 @@ machine:
     version: 2.1.5
   services:
     - docker
+
 dependencies:
   override:
-    - bundle install --path=vendor/bundle
+    - bundle install --path=vendor/bundle:
+        pwd: integration-test
 test:
   override:
     - bundle exec kitchen test:
