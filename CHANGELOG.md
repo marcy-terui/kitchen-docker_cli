@@ -1,3 +1,7 @@
+## 0.8.1
+
+* Support test-kitchen `1.4.0`
+
 ## 0.8.0
 
 * Add `instance_host_name` option
