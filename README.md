@@ -1,5 +1,7 @@
-# <a name="title"></a> Kitchen::DockerCli 
-[![Gem Version](https://badge.fury.io/rb/kitchen-docker_cli.svg)](http://badge.fury.io/rb/kitchen-docker_cli) [![Build Status](https://travis-ci.org/marcy-terui/kitchen-docker_cli.svg?branch=master)](https://travis-ci.org/marcy-terui/kitchen-docker_cli) [![Coverage Status](https://coveralls.io/repos/marcy-terui/kitchen-docker_cli/badge.png)](https://coveralls.io/r/marcy-terui/kitchen-docker_cli) [![Join the chat at https://gitter.im/marcy-terui/kitchen-docker_cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/marcy-terui/kitchen-docker_cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# <a name="title"></a> Kitchen::DockerCli
+[![Gem Version](https://badge.fury.io/rb/kitchen-docker_cli.svg)](http://badge.fury.io/rb/kitchen-docker_cli)  
+[![Build Status](https://travis-ci.org/marcy-terui/kitchen-docker_cli.svg?branch=master)](https://travis-ci.org/marcy-terui/kitchen-docker_cli) [![Circle CI](https://circleci.com/gh/marcy-terui/kitchen-docker_cli.svg?style=svg)](https://circleci.com/gh/marcy-terui/kitchen-docker_cli)  
+[![Join the chat at https://gitter.im/marcy-terui/kitchen-docker_cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/marcy-terui/kitchen-docker_cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Test Kitchen Driver for Docker command line interface.
 
@@ -42,6 +44,9 @@ At first, put your `.kitchen(.local).yml` like this.
 ```yml
 ---
 driver:
+  name: docker_cli
+
+transport:
   name: docker_cli
 
 platforms:
