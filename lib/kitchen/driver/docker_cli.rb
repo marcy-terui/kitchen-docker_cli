@@ -17,6 +17,7 @@
 # limitations under the License.
 
 require 'kitchen'
+require 'kitchen/docker_cli/dockerfile_template'
 
 module Kitchen
 
@@ -121,7 +122,10 @@ module Kitchen
 
       def docker_file
         if config[:dockerfile]
-          file = IO.read(File.expand_path(config[:dockerfile]))
+          file = ::Kitchen::DockerCli::DockerfileTemplate.new(
+            config[:dockerfile_vars],
+            config.to_hash
+          ).result
         else
           file = ["FROM #{config[:image]}"]
           case config[:platform]
@@ -134,8 +138,8 @@ module Kitchen
           else
             # TODO: Support other distribution
           end
-          Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
           Array(config[:environment]).each { |env, value| file << "ENV #{env}=#{value}" }
+          Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
           file.join("\n")
         end
       end
