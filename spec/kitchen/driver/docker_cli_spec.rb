@@ -211,12 +211,28 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
     }
     example do
       ret = "FROM ubuntu/12.04\n"
-      ret = "FROM ubuntu/12.04\n"
       ret << "RUN apt-get update\n"
       ret << "RUN apt-get -y install sudo curl tar\n"
+      ret << "ENV test=hoge\n"
       ret << "RUN test\n"
-      ret << "RUN test2\n"
-      ret << "ENV test=hoge"
+      ret << "RUN test2"
+      expect(@docker_cli.send(:docker_file)).to eq ret
+    end
+  end
+  context 'dockerfile template' do
+    let(:config) {
+      {
+        image: "ubuntu/12.04",
+        platform: "ubuntu",
+        dockerfile: File.join(__dir__, 'dockerfile.erb'),
+        dockerfile_vars: {"LANG" => "ja_JP.UTF-8"}
+      }
+    }
+    example do
+      ret = <<-EOH
+FROM ubuntu/12.04
+ENV LANG ja_JP.UTF-8
+EOH
       expect(@docker_cli.send(:docker_file)).to eq ret
     end
   end
