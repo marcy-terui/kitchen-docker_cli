@@ -134,8 +134,8 @@ module Kitchen
           else
             # TODO: Support other distribution
           end
-          Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
           Array(config[:environment]).each { |env, value| file << "ENV #{env}=#{value}" }
+          Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }
           file.join("\n")
         end
       end
