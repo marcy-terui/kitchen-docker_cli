@@ -257,7 +257,8 @@ Examples:
 
 ### dockerfile
 
-Create test image using a supplied dockerfile, instead of the default dockerfile created.  
+Create test image using a supplied Dockerfile, instead of the default Dockerfile created.  
+And it can be written as ERB template.  
 For best results, please:  
   - Ensure Package Repositories are updated
   - Ensure Dockerfile installs sudo, curl, and tar
@@ -265,6 +266,44 @@ For best results, please:
 
 ```yml
   dockerfile: my/dockerfile
+```
+
+### dockerfile_vars
+Template variables for the custom Dockerfile.
+
+Example:
+
+- .kitchen.yml
+
+```yml
+driver:
+  image: marcy/hoge
+  dockerfile: dockerfile.erb
+  dockerfile_vars:
+    envs:
+      LANG: ja_JP.UTF-8
+    cmds:
+      - yum -y install httpd
+```
+
+- dockerfile.erb
+
+```erb
+FROM <%= config[:image] %>
+<% @envs.each do |k,v| %>
+ENV <%= k %> <%= v %>
+<% end %>
+<% @cmds.each do |c| %>
+RUN <%= c %>
+<% end %>
+```
+
+- Result
+
+```
+FROM marcy/hoge
+ENV LANG ja_JP.UTF-8
+RUN yum -y install httpd
 ```
 
 ### memory_limit
