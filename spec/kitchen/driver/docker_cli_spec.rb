@@ -224,7 +224,7 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
       {
         image: "ubuntu/12.04",
         platform: "ubuntu",
-        dockerfile: File.join(__dir__, 'dockerfile.erb'),
+        dockerfile: File.join(File.dirname(__FILE__), 'dockerfile.erb'),
         dockerfile_vars: {"LANG" => "ja_JP.UTF-8"}
       }
     }
