@@ -1,3 +1,7 @@
+## 0.9.1
+
+* Bugfix
+
 ## 0.9.0
 
 * Change custom Dockerfile to ERB template [#11][] [#12][]
