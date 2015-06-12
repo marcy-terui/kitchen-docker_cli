@@ -24,8 +24,10 @@ module Kitchen
 
     class DockerfileTemplate
       def initialize(vars={}, config={})
-        vars.each do |k, v|
-          instance_variable_set("@#{k.to_s}", v)
+        if vars.is_a?(Hash)
+          vars.each do |k, v|
+            instance_variable_set("@#{k.to_s}", v)
+          end
         end
         self.class.class_eval <<-EOF
           def config

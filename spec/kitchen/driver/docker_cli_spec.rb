@@ -236,4 +236,20 @@ EOH
       expect(@docker_cli.send(:docker_file)).to eq ret
     end
   end
+  context 'dockerfile template when dockerfile_vars is nil' do
+    let(:config) {
+      {
+        image: "ubuntu/12.04",
+        platform: "ubuntu",
+        dockerfile: File.join(File.dirname(__FILE__), 'dockerfile_nil.erb'),
+        dockerfile_vars: nil
+      }
+    }
+    example do
+      ret = <<-EOH
+FROM ubuntu/12.04
+EOH
+      expect(@docker_cli.send(:docker_file)).to eq ret
+    end
+  end
 end

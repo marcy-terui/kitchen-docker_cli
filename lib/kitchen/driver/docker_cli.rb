@@ -33,6 +33,7 @@ module Kitchen
       default_config :privileged, false
       default_config :instance_host_name, false
       default_config :transport, "docker_cli"
+      default_config :dockerfile_vars, {}
 
       default_config :image do |driver|
         driver.default_image
