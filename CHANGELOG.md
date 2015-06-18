@@ -1,3 +1,7 @@
+## 0.10.0
+
+* Add `volumes_from` option
+
 ## 0.9.1
 
 * Bugfix

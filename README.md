@@ -255,6 +255,22 @@ Examples:
     - <%= Dir::pwd %>:/var:rw
 ```
 
+### volumes_from
+
+Mount data volume(s) from other container(s).
+
+Examples:
+
+```yml
+  volumes_from: container_name
+```
+
+```yml
+  volumes_from:
+    - container_a
+    - container_b
+```
+
 ### dockerfile
 
 Create test image using a supplied Dockerfile, instead of the default Dockerfile created.  
