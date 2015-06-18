@@ -120,6 +120,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
         :volume => '/dev:/dev',
         :volumes_from => 'data',
         :link => 'mysql:db',
+        :expose => 80,
         :memory_limit => '256m',
         :cpu_shares => 512,
         :network => 'none',
@@ -129,7 +130,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
     end
 
     example do
-      cmd = "run -d -t --name web -P -m 256m -c 512 --privileged --net none -h example.local -p 80:8080 -p 22:2222 -v /dev:/dev --volumes-from data --link mysql:db test /bin/bash"
+      cmd = "run -d -t --name web -P -m 256m -c 512 --privileged --net none -h example.local -p 80:8080 -p 22:2222 -v /dev:/dev --volumes-from data --link mysql:db --expose 80 test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end

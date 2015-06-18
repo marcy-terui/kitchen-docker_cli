@@ -105,6 +105,7 @@ module Kitchen
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
         Array(config[:volumes_from]).each { |vf| cmd << " --volumes-from #{vf}" }
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
+        Array(config[:expose]).each { |exp| cmd << " --expose #{exp}" }
         cmd << " #{image} #{config[:command]}"
       end
 
