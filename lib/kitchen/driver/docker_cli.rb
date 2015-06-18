@@ -103,6 +103,7 @@ module Kitchen
         end
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
+        Array(config[:volumes_from]).each { |vf| cmd << " --volumes-from #{vf}" }
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
         cmd << " #{image} #{config[:command]}"
       end
