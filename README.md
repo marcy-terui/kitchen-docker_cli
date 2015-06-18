@@ -239,6 +239,24 @@ Examples:
   publish_all: true
 ```
 
+### expose
+
+Expose a port or a range of ports from the container without publishing it to your host.
+
+The default value is `nil`.
+
+Examples:
+
+```yml
+  expose: 80
+```
+
+```yml
+expose:
+    - 80
+    - 22
+```
+
 ### volume
 
 Adds data volume(s) to the container.

@@ -1,3 +1,7 @@
+## 0.11.0
+
+* Add `expose` option
+
 ## 0.10.0
 
 * Add `volumes_from` option
