@@ -50,8 +50,25 @@ module Kitchen
         end
 
         def execute(command)
-          exec_cmd = docker_exec_command(@options[:container_id], command, :tty => true)
-          run_docker(exec_cmd) if command
+          return unless command
+          script = "/tmp/" + Digest::SHA256.hexdigest(command)
+          [
+            {
+              :prefix => "echo #{command.shellescape} | ",
+              :cmd => "sh -c 'cat > #{script}'",
+              :opt => {:interactive => true}
+            },
+            {:cmd => "chmod +x #{script}"},
+            {:cmd => "sh -c #{script}", :opt => {:tty => true}},
+            {:cmd => "rm #{script}"}
+          ].each do |param|
+            cmd = ""
+            cmd << param[:cmd]
+            run_command(
+              (param[:prefix] || "") +
+              "#{binary} " +
+              docker_exec_command(@options[:container_id], cmd, param[:opt] || {}))
+          end
         end
 
         def run_docker(command, options={})
