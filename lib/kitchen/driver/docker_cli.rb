@@ -18,6 +18,8 @@
 
 require 'kitchen'
 require 'kitchen/docker_cli/dockerfile_template'
+require 'fileutils'
+require 'securerandom'
 
 module Kitchen
 
@@ -57,6 +59,7 @@ module Kitchen
 
       def create(state)
         state[:image] = build(state) unless state[:image]
+        state[:upload_proxy_dir] = make_upload_proxy_dir unless state[:upload_proxy_dir]
         state[:container_id] = run(state) unless state[:container_id]
       end
 
@@ -64,6 +67,7 @@ module Kitchen
         instance.transport.connection(state) do |conn|
           conn.run_docker("rm -f #{state[:container_id]}") rescue false
         end
+        FileUtils.rm_rf(state[:upload_proxy_dir], :secure => true) if state[:upload_proxy_dir]
       end
 
       def build(state)
@@ -77,7 +81,7 @@ module Kitchen
       def run(state)
         output = ""
         instance.transport.connection(state) do |conn|
-          output = conn.run_docker(docker_run_command(state[:image]))
+          output = conn.run_docker(docker_run_command(state))
         end
         parse_container_id(output)
       end
@@ -88,7 +92,14 @@ module Kitchen
         cmd << ' -'
       end
 
-      def docker_run_command(image)
+      def make_upload_proxy_dir
+        path = File.join(config[:kitchen_root], ".kitchen", "kitchen-docker_cli", SecureRandom.uuid)
+        FileUtils.mkdir_p(path)
+        path
+      end
+
+      def docker_run_command(state)
+        image = state[:image]
         cmd = "run -d -t"
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
@@ -96,6 +107,7 @@ module Kitchen
         cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]
         cmd << ' --privileged' if config[:privileged]
         cmd << " --net #{config[:network]}" if config[:network]
+        cmd << " -v #{state[:upload_proxy_dir]}:/kitchen-docker_cli"
         if config[:hostname]
           cmd << " -h #{config[:hostname]}"
         elsif config[:instance_host_name]

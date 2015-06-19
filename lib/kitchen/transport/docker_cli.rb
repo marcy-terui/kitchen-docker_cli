@@ -18,6 +18,7 @@
 
 require "kitchen"
 require 'thor/util'
+require 'fileutils'
 
 module Kitchen
   module Transport
@@ -59,14 +60,11 @@ module Kitchen
         end
 
         def upload(locals, remote)
-          cmd = "mkdir -p #{remote} && rm -rf #{remote}/*"
-          execute(cmd)
+          FileUtils.rm_rf(Dir.glob(@options[:upload_proxy_dir] + "/*"), :secure => true)
           Array(locals).each do |local|
-            remote_cmd = "tar x -C #{remote}"
-            remote_cmd = "#{binary} #{docker_exec_command(@options[:container_id], remote_cmd, :interactive => true)}"
-            local_cmd  = "cd #{File.dirname(local)} && tar cf - ./#{File.basename(local)}"
-            run_command("#{local_cmd} | #{remote_cmd}")
+            FileUtils.cp_r(local, @options[:upload_proxy_dir], :remove_destination => true)
           end
+          execute("cp -r /kitchen-docker_cli/* #{remote}")
         end
 
         def docker_exec_command(container_id, cmd, opt = {})
