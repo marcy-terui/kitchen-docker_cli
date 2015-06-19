@@ -50,8 +50,10 @@ module Kitchen
         end
 
         def execute(command)
-          exec_cmd = docker_exec_command(@options[:container_id], command, :tty => true)
-          run_docker(exec_cmd) if command
+          if command
+            exec_cmd = docker_exec_command(@options[:container_id], command, :tty => true)
+            run_docker(exec_cmd)
+          end
         end
 
         def run_docker(command, options={})
@@ -73,6 +75,7 @@ module Kitchen
           exec_cmd = "exec"
           exec_cmd << " -t" if opt[:tty]
           exec_cmd << " -i" if opt[:interactive]
+          cmd = Util.wrap_command(cmd.gsub('\'', '"')) unless cmd.match(/\Ash\s\-c/)
           exec_cmd << " #{container_id} #{cmd}"
         end
 
