@@ -61,7 +61,7 @@ module Kitchen
         end
 
         def upload(locals, remote)
-          cmd = "mkdir -p #{remote} && rm -rf #{remote}/*"
+          cmd = "mkdir -p #{remote}"
           execute(cmd)
           Array(locals).each do |local|
             remote_cmd = "tar x -C #{remote}"
