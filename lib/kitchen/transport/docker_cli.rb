@@ -29,8 +29,13 @@ module Kitchen
       plugin_version Kitchen::VERSION
 
       default_config :host, nil
+      default_config :lxc_driver, false
+      default_config :docker_base, "docker"
+      default_config :lxc_attach_base, "sudo lxc-attach"
+      default_config :lxc_console_base, "sudo lxc-console"
 
       def connection(state, &block)
+        p config
         options = config.to_hash.merge(state)
         @connection = Kitchen::Transport::DockerCli::Connection.new(options, &block)
       end
@@ -40,24 +45,46 @@ module Kitchen
         include ShellOut
 
         def login_command
+          if @options[:lxc_driver]
+            lxc_login_command
+          else
+            docker_login_command
+          end
+        end
+
+        def docker_login_command
           args = []
           args << 'exec'
           args << '-t'
           args << '-i'
           args << @options[:container_id]
           args << '/bin/bash'
-          LoginCommand.new(binary, args)
+          LoginCommand.new(docker_base, args)
         end
 
-        def execute(command)
-          if command
-            exec_cmd = docker_exec_command(@options[:container_id], command, :tty => true)
-            run_docker(exec_cmd)
+        def lxc_login_command
+          args = []
+          args << 'in'
+          args << "\"$(#{docker_base} inspect --format '{{.Id}}' #{@options[:container_id]})\""
+          LoginCommand.new(@options[:lxc_console_base], args)
+        end
+
+        def execute(cmd)
+          if cmd
+            if @options[:lxc_driver]
+              run_lxc(lxc_exec_command(@options[:container_id], cmd))
+            else
+              run_docker(docker_exec_command(@options[:container_id], cmd, :tty => true))
+            end
           end
         end
 
-        def run_docker(command, options={})
-          run_command("#{binary} #{command}", options)
+        def run_lxc(cmd, options={})
+          run_command("#{lxc_attach_base} #{cmd}", options)
+        end
+
+        def run_docker(cmd, options={})
+          run_command("#{docker_base} #{cmd}", options)
         end
 
         def upload(locals, remote)
@@ -65,7 +92,7 @@ module Kitchen
           execute(cmd)
           Array(locals).each do |local|
             remote_cmd = "tar x -C #{remote}"
-            remote_cmd = "#{binary} #{docker_exec_command(@options[:container_id], remote_cmd, :interactive => true)}"
+            remote_cmd = "#{docker_base} #{docker_exec_command(@options[:container_id], remote_cmd, :interactive => true)}"
             local_cmd  = "cd #{File.dirname(local)} && tar cf - ./#{File.basename(local)}"
             run_command("#{local_cmd} | #{remote_cmd}")
           end
@@ -75,12 +102,24 @@ module Kitchen
           exec_cmd = "exec"
           exec_cmd << " -t" if opt[:tty]
           exec_cmd << " -i" if opt[:interactive]
-          cmd = Util.wrap_command(cmd.gsub('\'', '"')) unless cmd.match(/\Ash\s\-c/)
-          exec_cmd << " #{container_id} #{cmd}"
+          exec_cmd << " #{container_id} #{wrap_command(cmd)}"
         end
 
-        def binary
-          "docker"
+        def lxc_exec_command(container_id, cmd)
+          exec_cmd = " -n \"$(#{docker_base} inspect --format '{{.Id}}' #{@options[:container_id]})\""
+          exec_cmd << " -- #{wrap_command(cmd)}"
+        end
+
+        def wrap_command(cmd)
+          cmd.match(/\Ash\s\-c/) ? cmd : Util.wrap_command(cmd.gsub('\'', '"'))
+        end
+
+        def docker_base
+          @options[:docker_base]
+        end
+
+        def lxc_attach_base
+          @options[:lxc_attach_base]
         end
 
       end
