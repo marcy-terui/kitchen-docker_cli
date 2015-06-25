@@ -15,6 +15,10 @@ suites:
   - name: chef
     provisioner:
       name: chef_zero
+    driver:
+      dns:
+        - 8.8.8.8
+        - 199.85.126.10
 
   - name: ansible
     provisioner:

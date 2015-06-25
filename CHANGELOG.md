@@ -1,3 +1,7 @@
+## 0.12.0
+
+* Pull request [#17][]: Add `dns` option ([@yewton][])
+
 ## 0.11.2
 
 * Bugfix [#16][]
@@ -78,5 +82,7 @@
 [#11]: https://github.com/marcy-terui/kitchen-docker_cli/issues/11
 [#12]: https://github.com/marcy-terui/kitchen-docker_cli/issues/12
 [#16]: https://github.com/marcy-terui/kitchen-docker_cli/issues/16
+[#17]: https://github.com/marcy-terui/kitchen-docker_cli/issues/17
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
+[@yewton]: https://github.com/yewton
