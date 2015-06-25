@@ -92,7 +92,7 @@ module Kitchen
           execute(cmd)
           Array(locals).each do |local|
             remote_cmd = "tar x -C #{remote}"
-            if @option[:lxc_driver]
+            if @options[:lxc_driver]
               remote_cmd = "#{lxc_attach_base} #{lxc_exec_command(@options[:container_id], remote_cmd)}"
             else
               remote_cmd = "#{docker_base} #{docker_exec_command(@options[:container_id], remote_cmd, :interactive => true)}"
