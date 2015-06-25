@@ -75,7 +75,7 @@ module Kitchen
           exec_cmd = "exec"
           exec_cmd << " -t" if opt[:tty]
           exec_cmd << " -i" if opt[:interactive]
-          cmd = Util.wrap_command(cmd.gsub('\'', '"')) unless cmd.match(/\Ash\s\-c/)
+          cmd = Util.wrap_command(cmd.gsub("'", "'\\\\''")) unless cmd.match(/\Ash\s\-c/)
           exec_cmd << " #{container_id} #{cmd}"
         end
 
