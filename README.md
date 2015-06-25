@@ -192,6 +192,20 @@ Examples:
   instance_host_name: true
 ```
 
+### dns
+
+The IP addresses of your DNS servers.
+
+```yml
+  dns: 8.8.8.8
+```
+
+```yml
+  dns:
+    - 8.8.8.8
+    - 8.8.4.4
+```
+
 ### link
 
 Set `container_name`(and alias) of other container(s) that connect from the suite container.
