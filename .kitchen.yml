@@ -25,3 +25,5 @@ suites:
       name: ansible_playbook
       playbook: test/integration/ansible/default.yml
       hosts: 127.0.0.1
+    verifier:
+      ruby_bindir: /usr/bin

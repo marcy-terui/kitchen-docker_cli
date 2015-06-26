@@ -4,19 +4,26 @@ driver:
 
 transport:
   name: docker_cli
+  lxc_driver: true
 
 driver_config:
   hostname: example.local
-
-provisioner:
-  name: chef_zero
 
 platforms:
   - name: ubuntu-12.04
   - name: centos-6.4
 
 suites:
-  - name: default
+  - name: chef
+    provisioner:
+      name: chef_zero
     run_list:
       - recipe[integration-test::default]
     attributes:
+
+  - name: ansible
+    provisioner:
+      name: ansible_playbook
+      require_ruby_for_busser: false
+      playbook: test/integration/ansible/default.yml
+      hosts: 127.0.0.1

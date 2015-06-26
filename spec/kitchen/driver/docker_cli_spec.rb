@@ -198,7 +198,8 @@ describe Kitchen::Driver::DockerCli, "docker_file" do
     example do
       ret = "FROM centos/centos6\n"
       ret << "RUN yum clean all\n"
-      ret << "RUN yum -y install sudo curl tar"
+      ret << "RUN yum -y install sudo curl tar\n"
+      ret << 'RUN echo "Defaults:root !requiretty" >> /etc/sudoers'
       expect(@docker_cli.send(:docker_file)).to eq ret
     end
   end
