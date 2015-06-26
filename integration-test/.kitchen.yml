@@ -9,15 +9,20 @@ transport:
 driver_config:
   hostname: example.local
 
-provisioner:
-  name: chef_zero
-
 platforms:
   - name: ubuntu-12.04
   - name: centos-6.4
 
 suites:
-  - name: default
+  - name: chef
+    provisioner:
+      name: chef_zero
     run_list:
       - recipe[integration-test::default]
     attributes:
+
+  - name: ansible
+    provisioner:
+      name: ansible_playbook
+      playbook: test/integration/ansible/default.yml
+      hosts: 127.0.0.1

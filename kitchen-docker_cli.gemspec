@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = []
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features|integration-test)/})
   spec.require_paths = ['lib']
 
   spec.add_dependency 'test-kitchen', '>= 1.3'
