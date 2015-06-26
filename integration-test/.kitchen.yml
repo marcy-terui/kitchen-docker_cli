@@ -24,5 +24,6 @@ suites:
   - name: ansible
     provisioner:
       name: ansible_playbook
+      require_chef_for_busser: true
       playbook: test/integration/ansible/default.yml
       hosts: 127.0.0.1
