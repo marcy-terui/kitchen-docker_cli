@@ -24,7 +24,5 @@ suites:
   - name: ansible
     provisioner:
       name: ansible_playbook
-      require_chef_for_busser: true
-      chef_bootstrap_url: https://www.chef.io/chef/install.sh
       playbook: test/integration/ansible/default.yml
       hosts: 127.0.0.1
