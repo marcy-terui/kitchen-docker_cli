@@ -1,3 +1,7 @@
+## 0.12.1
+
+* Fix error on `kitchen-ansible` with extra_vars [#18][]
+
 ## 0.12.0
 
 * Pull request [#17][]: Add `dns` option ([@yewton][])
