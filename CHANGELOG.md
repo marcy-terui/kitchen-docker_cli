@@ -1,3 +1,7 @@
+## 0.13.0
+
+* Support Docker LXC driver(for CircleCI)
+
 ## 0.12.1
 
 * Fix error on `kitchen-ansible` with extra_vars [#18][]

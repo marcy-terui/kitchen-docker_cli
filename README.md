@@ -59,6 +59,8 @@ suites:
     attributes:
 ```
 
+## Driver Configuration
+
 ### image
 
 The Docker image's path.
@@ -317,6 +319,7 @@ For best results, please:
 ```
 
 ### dockerfile_vars
+
 Template variables for the custom Dockerfile.
 
 Example:
@@ -369,6 +372,56 @@ This option with value 0 indicates that the running container has access to all 
 
 ```yml
   cpu_shares: 512
+```
+
+## Transport Configuration
+
+### lxc_driver
+
+If you use the LXC Driver of Docker (CircleCI), please set `true`  
+
+The default value is `false`
+
+```yml
+  lxc_driver: true
+```
+
+### docker_base
+
+Base of `docker` command.
+
+The default value is `docker`
+
+Example:
+
+```yml
+  docker_base: sudo /path/to/docker
+```
+
+### lxc_attach_base
+
+Base of `lxc-attach` command.  
+This option is used on LXC driver only.
+
+The default value is `sudo lxc-attach`
+
+Example:
+
+```yml
+  docker_base: sudo /path/to/lxc-attach
+```
+
+### lxc_console_base
+
+Base of `lxc-console` command.  
+This option is used on LXC driver only.
+
+The default value is `sudo lxc-console`
+
+Example:
+
+```yml
+  docker_base: sudo /path/to/lxc-console
 ```
 
 ## <a name="development"></a> Development

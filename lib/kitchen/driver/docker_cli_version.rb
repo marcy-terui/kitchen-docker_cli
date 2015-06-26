@@ -21,6 +21,6 @@ module Kitchen
   module Driver
 
     # Version string for DockerCli Kitchen driver
-    DOCKER_CLI_VERSION = '0.12.1'
+    DOCKER_CLI_VERSION = '0.13.0'
   end
 end
