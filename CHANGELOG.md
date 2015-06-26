@@ -87,6 +87,7 @@
 [#12]: https://github.com/marcy-terui/kitchen-docker_cli/issues/12
 [#16]: https://github.com/marcy-terui/kitchen-docker_cli/issues/16
 [#17]: https://github.com/marcy-terui/kitchen-docker_cli/issues/17
+[#18]: https://github.com/marcy-terui/kitchen-docker_cli/issues/18
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
 [@yewton]: https://github.com/yewton
