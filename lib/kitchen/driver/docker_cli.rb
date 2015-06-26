@@ -139,6 +139,7 @@ module Kitchen
           when 'rhel', 'centos', 'fedora'
             file << 'RUN yum clean all'
             file << 'RUN yum -y install sudo curl tar'
+            file << 'echo "Defaults:root !requiretty" >> /etc/sudoers'
           else
             # TODO: Support other distribution
           end

@@ -35,7 +35,6 @@ module Kitchen
       default_config :lxc_console_base, "sudo lxc-console"
 
       def connection(state, &block)
-        p config
         options = config.to_hash.merge(state)
         @connection = Kitchen::Transport::DockerCli::Connection.new(options, &block)
       end
@@ -115,7 +114,7 @@ module Kitchen
         end
 
         def wrap_command(cmd)
-          cmd.match(/\Ash\s\-c/) ? cmd : Util.wrap_command(cmd.gsub('\'', '"'))
+          cmd.match(/\Ash\s\-c/) ? cmd : Util.wrap_command(cmd.gsub('\'', "'\\\\''"))
         end
 
         def docker_base

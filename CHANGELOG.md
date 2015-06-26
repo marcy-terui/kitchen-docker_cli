@@ -1,3 +1,7 @@
+## 0.12.1
+
+* Fix error on `kitchen-ansible` with extra_vars [#18][]
+
 ## 0.12.0
 
 * Pull request [#17][]: Add `dns` option ([@yewton][])
@@ -83,6 +87,7 @@
 [#12]: https://github.com/marcy-terui/kitchen-docker_cli/issues/12
 [#16]: https://github.com/marcy-terui/kitchen-docker_cli/issues/16
 [#17]: https://github.com/marcy-terui/kitchen-docker_cli/issues/17
+[#18]: https://github.com/marcy-terui/kitchen-docker_cli/issues/18
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
 [@yewton]: https://github.com/yewton
