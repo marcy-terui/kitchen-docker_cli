@@ -2,6 +2,5 @@
 - hosts: 127.0.0.1
   user: root
   tasks:
-    - name: "apt-get install git"
-      apt: pkg=git
-      sudo: no
+    - name: "test"
+      shell: echo "test"
