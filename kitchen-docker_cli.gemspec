@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Kitchen::Driver::DOCKER_CLI_VERSION
   spec.authors       = ['Masashi Terui']
   spec.email         = ['marcy9114@gmail.com']
-  spec.description   = %q{A Test Kitchen Driver for Docker native CLI}
+  spec.description   = %q{A Test Kitchen Driver(and Transport) for Docker native CLI}
   spec.summary       = spec.description
   spec.homepage      = 'https://github.com/marcy-terui/kitchen-docker_cli'
   spec.license       = 'Apache 2.0'

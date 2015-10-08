@@ -3,10 +3,10 @@
 [![Build Status](https://travis-ci.org/marcy-terui/kitchen-docker_cli.svg?branch=master)](https://travis-ci.org/marcy-terui/kitchen-docker_cli) [![Circle CI](https://circleci.com/gh/marcy-terui/kitchen-docker_cli.svg?style=svg)](https://circleci.com/gh/marcy-terui/kitchen-docker_cli)  
 [![Join the chat at https://gitter.im/marcy-terui/kitchen-docker_cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/marcy-terui/kitchen-docker_cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A Test Kitchen Driver for Docker command line interface.
+A Test Kitchen Driver(and Transport) for Docker command line interface.
 
 This plugin is created with only Docker CLI functions.
-Therefore, we can test with an environment that has no extra software such as ```sshd```.
+Therefore, we can test with an environment that has no extra software such as `sshd`.
 
 ## <a name="requirements"></a> Requirements
 
@@ -269,8 +269,8 @@ Examples:
 
 ```yml
 expose:
-    - 80
-    - 22
+  - 80
+  - 22
 ```
 
 ### volume
