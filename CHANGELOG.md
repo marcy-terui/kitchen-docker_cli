@@ -1,3 +1,7 @@
+## 0.13.1
+
+- Fix output of `destroy` action in the case of the container does not exist.
+
 ## 0.13.0
 
 * Support Docker LXC driver(for CircleCI)

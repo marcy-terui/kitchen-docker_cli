@@ -62,7 +62,7 @@ module Kitchen
 
       def destroy(state)
         instance.transport.connection(state) do |conn|
-          conn.run_docker("rm -f #{state[:container_id]}") rescue false
+          conn.run_docker("rm -f #{state[:container_id]}") if state[:container_id]
         end
       end
 
