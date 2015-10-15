@@ -268,9 +268,25 @@ Examples:
 ```
 
 ```yml
-expose:
-  - 80
-  - 22
+  expose:
+    - 80
+    - 22
+```
+
+### add_host
+
+Add additional lines to `/etc/hosts`.
+
+Examples:
+
+```yml
+  add_host: myhost:127.0.0.1
+```
+
+```yml
+  add_host:
+    - myhost:127.0.0.1
+    - yourhost:123.123.123.123
 ```
 
 ### volume
