@@ -1,3 +1,7 @@
+## 0.14.0
+
+* Pull request [#21][]: Support `--add-host` option ([@sawanoboly][])
+
 ## 0.13.1
 
 - Fix output of `destroy` action in the case of the container does not exist.
@@ -96,6 +100,8 @@
 [#16]: https://github.com/marcy-terui/kitchen-docker_cli/issues/16
 [#17]: https://github.com/marcy-terui/kitchen-docker_cli/issues/17
 [#18]: https://github.com/marcy-terui/kitchen-docker_cli/issues/18
+[#21]: https://github.com/marcy-terui/kitchen-docker_cli/issues/21
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
+[@sawanoboly]: https://github.com/sawanoboly
 [@yewton]: https://github.com/yewton
