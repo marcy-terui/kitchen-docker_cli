@@ -83,13 +83,13 @@ module Kitchen
       end
 
       def docker_build_command
-        cmd = 'build'
+        cmd = String.new('build')
         cmd << ' --no-cache' if config[:no_cache]
         cmd << ' -'
       end
 
       def docker_run_command(image)
-        cmd = "run -d -t"
+        cmd = String.new("run -d -t")
         cmd << " --name #{config[:container_name]}" if config[:container_name]
         cmd << ' -P' if config[:publish_all]
         cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
@@ -107,6 +107,7 @@ module Kitchen
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
         Array(config[:expose]).each { |exp| cmd << " --expose #{exp}" }
         Array(config[:dns]).each {|dns| cmd << " --dns #{dns}"}
+        Array(config[:add_host]).each {|mapping| cmd << " --add-host #{mapping}"}
         cmd << " #{image} #{config[:command]}"
       end
 

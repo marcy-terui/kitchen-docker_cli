@@ -126,12 +126,13 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
         :network => 'none',
         :hostname => 'example.local',
         :instance_host_name => true,
-        :dns => ['8.8.8.8', '8.8.4.4']
+        :dns => ['8.8.8.8', '8.8.4.4'],
+        :add_host => ['myhost:127.0.0.1']
       }
     end
 
     example do
-      cmd = "run -d -t --name web -P -m 256m -c 512 --privileged --net none -h example.local -p 80:8080 -p 22:2222 -v /dev:/dev --volumes-from data --link mysql:db --expose 80 --dns 8.8.8.8 --dns 8.8.4.4 test /bin/bash"
+      cmd = "run -d -t --name web -P -m 256m -c 512 --privileged --net none -h example.local -p 80:8080 -p 22:2222 -v /dev:/dev --volumes-from data --link mysql:db --expose 80 --dns 8.8.8.8 --dns 8.8.4.4 --add-host myhost:127.0.0.1 test /bin/bash"
       expect(@docker_cli.docker_run_command('test')).to eq cmd
     end
   end
