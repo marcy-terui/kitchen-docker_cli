@@ -125,6 +125,10 @@ environment:
   LANG: ja_JP.UTF-8
 ```
 
+### build_context
+
+Specify a path for build context. Defaults to 'false' which results in 'docker build -'
+
 ### no_cache
 
 Not use the cached image on `docker build`.

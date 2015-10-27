@@ -74,6 +74,14 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)
   end
 
+  context 'build_context' do
+    let(:config)	{ {:build_context => "/tmp/somepath" } }
+    
+    example do
+      expect(@docker_cli.docker_build_command).to eq 'build /tmp/somepath'
+    end
+  end
+
   context 'default' do
     let(:config)       { {:no_cache => true} }
 

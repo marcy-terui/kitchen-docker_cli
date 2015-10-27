@@ -29,6 +29,7 @@ module Kitchen
     class DockerCli < Kitchen::Driver::Base
 
       default_config :no_cache, false
+      default_config :build_context, false
       default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
       default_config :privileged, false
       default_config :instance_host_name, false
@@ -85,7 +86,11 @@ module Kitchen
       def docker_build_command
         cmd = String.new('build')
         cmd << ' --no-cache' if config[:no_cache]
-        cmd << ' -'
+        if config[:build_context]
+          cmd << " #{config[:build_context]}"
+        else
+          cmd << ' -'
+        end
       end
 
       def docker_run_command(image)
