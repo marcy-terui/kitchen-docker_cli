@@ -125,6 +125,10 @@ environment:
   LANG: ja_JP.UTF-8
 ```
 
+### build_context
+
+Pass the basedir as the Docker build context: 'docker build <options> .' Default is 'false'.
+
 ### no_cache
 
 Not use the cached image on `docker build`.

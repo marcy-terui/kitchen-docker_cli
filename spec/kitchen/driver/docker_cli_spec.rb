@@ -74,6 +74,14 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)
   end
 
+  context 'build_context' do
+    let(:config)	{ {:build_context => true} }
+    
+    example do
+      expect(@docker_cli.docker_build_command).to eq 'build .'
+    end
+  end
+
   context 'default' do
     let(:config)       { {:no_cache => true} }
 
@@ -89,6 +97,7 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
       expect(@docker_cli.docker_build_command).to eq 'build -'
     end
   end
+
 end
 
 describe Kitchen::Driver::DockerCli, "docker_run_command" do
