@@ -1,3 +1,7 @@
+## 0.14.1
+
+* Pull request [#23][]: Add `build_context` option to pass Docker build context ([@nrvale0][])
+
 ## 0.14.0
 
 * Pull request [#21][]: Support `--add-host` option ([@sawanoboly][])
@@ -101,7 +105,9 @@
 [#17]: https://github.com/marcy-terui/kitchen-docker_cli/issues/17
 [#18]: https://github.com/marcy-terui/kitchen-docker_cli/issues/18
 [#21]: https://github.com/marcy-terui/kitchen-docker_cli/issues/21
+[#23]: https://github.com/marcy-terui/kitchen-docker_cli/issues/23
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
+[@nrvale0]: https://github.com/nrvale0
 [@sawanoboly]: https://github.com/sawanoboly
 [@yewton]: https://github.com/yewton
