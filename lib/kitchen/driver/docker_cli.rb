@@ -30,6 +30,7 @@ module Kitchen
 
       default_config :no_cache, false
       default_config :build_context, false
+      default_config :build_pull, ''
       default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
       default_config :privileged, false
       default_config :instance_host_name, false
@@ -85,7 +86,10 @@ module Kitchen
 
       def docker_build_command
         cmd = String.new('build')
+
+        cmd << ' --pull=false' if '' != config[:build_pull]
         cmd << ' --no-cache' if config[:no_cache]
+
         if config[:build_context]
           cmd << ' .'
         else

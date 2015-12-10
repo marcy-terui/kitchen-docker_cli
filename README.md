@@ -129,6 +129,10 @@ environment:
 
 Pass the basedir as the Docker build context: 'docker build <options> .' Default is 'false'.
 
+### build_pull
+
+If *any value* is specified it will translate to --pull=false during 'docker build'.
+
 ### no_cache
 
 Not use the cached image on `docker build`.
