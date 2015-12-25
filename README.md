@@ -5,8 +5,8 @@
 
 A Test Kitchen Driver(and Transport) for Docker command line interface.
 
-This plugin is created with only Docker CLI functions.
-Therefore, we can test with an environment that has no extra software such as `sshd`.
+This plugin is created with only Docker CLI functions.  
+We can test on the environment that has no extra software such as `sshd`.
 
 ## <a name="requirements"></a> Requirements
 
