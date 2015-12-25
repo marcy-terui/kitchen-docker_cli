@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'kitchen/driver/docker_cli'
 
-describe Kitchen::Driver::DockerCli, "default_image" do
+describe Kitchen::Driver::DockerCli, "#default_image" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new
@@ -26,7 +26,7 @@ describe Kitchen::Driver::DockerCli, "default_image" do
   end
 end
 
-describe Kitchen::Driver::DockerCli, "default_platform" do
+describe Kitchen::Driver::DockerCli, "#default_platform" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new
@@ -42,7 +42,7 @@ describe Kitchen::Driver::DockerCli, "default_platform" do
   end
 end
 
-describe Kitchen::Driver::DockerCli, "create" do
+describe Kitchen::Driver::DockerCli, "#create" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)
@@ -68,7 +68,7 @@ describe Kitchen::Driver::DockerCli, "create" do
   end
 end
 
-describe Kitchen::Driver::DockerCli, "docker_build_command" do
+describe Kitchen::Driver::DockerCli, "#docker_build_command" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)
@@ -76,7 +76,7 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
 
   context 'build_context' do
     let(:config)	{ {:build_context => true} }
-    
+
     example do
       expect(@docker_cli.docker_build_command).to eq 'build .'
     end
@@ -100,7 +100,7 @@ describe Kitchen::Driver::DockerCli, "docker_build_command" do
 
 end
 
-describe Kitchen::Driver::DockerCli, "docker_run_command" do
+describe Kitchen::Driver::DockerCli, "#docker_run_command" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)
@@ -147,7 +147,7 @@ describe Kitchen::Driver::DockerCli, "docker_run_command" do
   end
 end
 
-describe Kitchen::Driver::DockerCli, "parse_image_id" do
+describe Kitchen::Driver::DockerCli, "#parse_image_id" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new()
@@ -165,7 +165,7 @@ describe Kitchen::Driver::DockerCli, "parse_image_id" do
 
 end
 
-describe Kitchen::Driver::DockerCli, "parse_container_id" do
+describe Kitchen::Driver::DockerCli, "#parse_container_id" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new()
@@ -192,7 +192,7 @@ describe Kitchen::Driver::DockerCli, "parse_container_id" do
 
 end
 
-describe Kitchen::Driver::DockerCli, "docker_file" do
+describe Kitchen::Driver::DockerCli, "#docker_file" do
 
   before do
     @docker_cli = Kitchen::Driver::DockerCli.new(config)

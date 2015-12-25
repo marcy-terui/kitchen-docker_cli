@@ -63,7 +63,11 @@ module Kitchen
 
       def destroy(state)
         instance.transport.connection(state) do |conn|
-          conn.run_docker("rm -f #{state[:container_id]}") if state[:container_id]
+          begin
+            conn.run_docker("rm -f #{state[:container_id]}") if state[:container_id]
+          rescue => e
+            raise e unless conn.options[:lxc_driver]
+          end
         end
       end
 
