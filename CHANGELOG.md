@@ -1,3 +1,7 @@
+## 0.14.2
+
+* Fix error on Circle-CI
+
 ## 0.14.1
 
 * Pull request [#23][]: Add `build_context` option to pass Docker build context ([@nrvale0][])
