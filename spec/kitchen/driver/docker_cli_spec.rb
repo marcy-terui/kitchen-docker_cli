@@ -214,6 +214,20 @@ describe Kitchen::Driver::DockerCli, "#docker_file" do
     end
   end
 
+  context 'enable skip_preparation' do
+    let(:config) do
+      {
+        image: "centos/centos6",
+        platform: "centos",
+        skip_preparation: true
+      }
+    end
+    example do
+      ret = "FROM centos/centos6"
+      expect(@docker_cli.send(:docker_file)).to eq ret
+    end
+  end
+
   context 'set run_command' do
     let(:config) {
       {

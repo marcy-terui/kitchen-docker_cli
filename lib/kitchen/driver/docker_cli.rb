@@ -35,6 +35,7 @@ module Kitchen
       default_config :instance_host_name, false
       default_config :transport, "docker_cli"
       default_config :dockerfile_vars, {}
+      default_config :skip_preparation, false
 
       default_config :image do |driver|
         driver.default_image
@@ -142,16 +143,18 @@ module Kitchen
           ).result
         else
           file = ["FROM #{config[:image]}"]
-          case config[:platform]
-          when 'debian', 'ubuntu'
-            file << 'RUN apt-get update'
-            file << 'RUN apt-get -y install sudo curl tar'
-          when 'rhel', 'centos', 'fedora'
-            file << 'RUN yum clean all'
-            file << 'RUN yum -y install sudo curl tar'
-            file << 'RUN echo "Defaults:root !requiretty" >> /etc/sudoers'
-          else
-            # TODO: Support other distribution
+          unless config[:skip_preparation]
+            case config[:platform]
+            when 'debian', 'ubuntu'
+              file << 'RUN apt-get update'
+              file << 'RUN apt-get -y install sudo curl tar'
+            when 'rhel', 'centos', 'fedora'
+              file << 'RUN yum clean all'
+              file << 'RUN yum -y install sudo curl tar'
+              file << 'RUN echo "Defaults:root !requiretty" >> /etc/sudoers'
+            else
+              # TODO: Support other distribution
+            end
           end
           Array(config[:environment]).each { |env, value| file << "ENV #{env}=#{value}" }
           Array(config[:run_command]).each { |cmd| file << "RUN #{cmd}" }

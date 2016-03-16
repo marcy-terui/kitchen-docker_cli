@@ -141,6 +141,19 @@ Examples:
   no_cache: true
 ```
 
+### skip_preparation
+
+Skip the automatically preparation in the step to building Docker image.  
+(i.e. Just pulling the image)
+
+The default value is `false`.
+
+Examples:
+
+```yml
+  skip_preparation: true
+```
+
 ### privileged
 
 Give extended privileges to the suite container.

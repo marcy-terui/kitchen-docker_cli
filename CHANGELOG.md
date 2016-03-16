@@ -1,3 +1,7 @@
+## 0.15.0
+
+- Add `skip_preparation` option
+
 ## 0.14.2
 
 * Fix error on Circle-CI
