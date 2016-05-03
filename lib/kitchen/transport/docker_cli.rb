@@ -94,7 +94,7 @@ module Kitchen
             if @options[:lxc_driver]
               remote_cmd = "#{lxc_attach_base} #{lxc_exec_command(@options[:container_id], remote_cmd)}"
             else
-              remote_cmd = "#{docker_base} #{docker_exec_command(@options[:container_id], remote_cmd, :interactive => true)}"
+              remote_cmd = "#{docker_base} cp - #{@options[:container_id]}:#{remote}"
             end
             local_cmd  = "cd #{File.dirname(local)} && tar cf - ./#{File.basename(local)}"
             run_command("#{local_cmd} | #{remote_cmd}")
