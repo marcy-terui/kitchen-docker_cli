@@ -12,8 +12,8 @@ We can test on the environment that has no extra software such as `sshd`.
 
 - Test-Kitchen (>= 1.3)
 
-- Docker (>= 1.3)
-This driver uses `docker exec` command.
+- Docker (>= 1.8)
+This driver uses `docker exec` and `docker cp` to upload some files to the containers.  
 
 - tar (GNU Tar)
 

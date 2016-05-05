@@ -1,6 +1,10 @@
+## 0.15.1
+
+* Pull request [#30][]: Fix [#29][]: use docker cp to upload files ([@s-bernard][])
+
 ## 0.15.0
 
-- Add `skip_preparation` option
+* Add `skip_preparation` option
 
 ## 0.14.2
 
@@ -114,8 +118,11 @@
 [#18]: https://github.com/marcy-terui/kitchen-docker_cli/issues/18
 [#21]: https://github.com/marcy-terui/kitchen-docker_cli/issues/21
 [#23]: https://github.com/marcy-terui/kitchen-docker_cli/issues/23
+[#29]: https://github.com/marcy-terui/kitchen-docker_cli/issues/29
+[#30]: https://github.com/marcy-terui/kitchen-docker_cli/issues/30
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
 [@nrvale0]: https://github.com/nrvale0
+[@s-bernard]: https://github.com/s-bernard
 [@sawanoboly]: https://github.com/sawanoboly
 [@yewton]: https://github.com/yewton
