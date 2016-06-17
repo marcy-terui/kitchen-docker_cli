@@ -33,6 +33,7 @@ module Kitchen
       default_config :command, 'sh -c \'while true; do sleep 1d; done;\''
       default_config :privileged, false
       default_config :instance_host_name, false
+      default_config :instance_container_name, false
       default_config :transport, "docker_cli"
       default_config :dockerfile_vars, {}
       default_config :skip_preparation, false
@@ -100,7 +101,11 @@ module Kitchen
 
       def docker_run_command(image)
         cmd = String.new("run -d -t")
-        cmd << " --name #{config[:container_name]}" if config[:container_name]
+        if config[:container_name]
+          cmd << " --name #{config[:container_name]}"
+        elsif config[:instance_container_name]
+          cmd << " --name #{instance.name}"
+        end
         cmd << ' -P' if config[:publish_all]
         cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
         cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]

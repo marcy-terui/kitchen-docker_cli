@@ -176,6 +176,18 @@ Examples:
   container_name: web
 ```
 
+### instance_container_name
+
+Use instance name to container_name.
+
+The default value is `false`.
+
+Examples:
+
+```yml
+  instance_container_name: true
+```
+
 ### network
 
 Set the Network mode for the container.  
@@ -201,6 +213,7 @@ Examples:
 ```
 
 ### instance_host_name
+
 Use instance name to hostname.
 
 The default value is `false`.
