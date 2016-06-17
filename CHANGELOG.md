@@ -1,3 +1,7 @@
+## 0.16.0
+
+* Pull request [#31][]: Add instance_container_name option ([@s-bernard][])
+
 ## 0.15.1
 
 * Pull request [#30][]: Fix [#29][]: use docker cp to upload files ([@s-bernard][])
@@ -8,7 +12,7 @@
 
 ## 0.14.2
 
-* Fix error on Circle-CI
+* Fix error on Circle CI
 
 ## 0.14.1
 
