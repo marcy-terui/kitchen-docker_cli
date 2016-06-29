@@ -109,6 +109,7 @@ module Kitchen
         cmd << ' -P' if config[:publish_all]
         cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
         cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]
+        cmd << " --security-opt #{config[:security_opt]}" if config[:security_opt]
         cmd << ' --privileged' if config[:privileged]
         cmd << " --net #{config[:network]}" if config[:network]
         if config[:hostname]

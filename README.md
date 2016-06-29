@@ -166,6 +166,18 @@ Examples:
   privileged: true
 ```
 
+### security_opt
+
+Define the seccomp security profile to use.
+
+The default value is `nil`.
+
+Examples:
+
+```yml
+  security_opt: seccomp=unconfined
+```
+
 ### container_name
 
 Set the name of container to link other container(s).
