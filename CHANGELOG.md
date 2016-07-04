@@ -1,3 +1,7 @@
+## 0.17.0
+
+* Pull request [#32][]: Add ability to configure security options ([@fphilippon][])
+
 ## 0.16.0
 
 * Pull request [#31][]: Add instance_container_name option ([@s-bernard][])
