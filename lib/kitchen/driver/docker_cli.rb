@@ -37,6 +37,7 @@ module Kitchen
       default_config :transport, "docker_cli"
       default_config :dockerfile_vars, {}
       default_config :skip_preparation, false
+      default_config :destroy_container_name, true
 
       default_config :image do |driver|
         driver.default_image
@@ -66,7 +67,14 @@ module Kitchen
       def destroy(state)
         instance.transport.connection(state) do |conn|
           begin
-            conn.run_docker("rm -f #{state[:container_id]}") if state[:container_id]
+            if state[:container_id]
+              output = conn.run_docker("ps -a -q -f id=#{state[:container_id]}").chomp
+              conn.run_docker("rm -f #{state[:container_id]}") unless output.empty?
+            end
+            if config[:destroy_container_name] && container_name
+              output = conn.run_docker("ps -a -q -f name=#{container_name}").chomp
+              conn.run_docker("rm -f #{container_name}") unless output.empty?
+            end
           rescue => e
             raise e unless conn.send(:options)[:lxc_driver]
           end
@@ -101,11 +109,7 @@ module Kitchen
 
       def docker_run_command(image)
         cmd = String.new("run -d -t")
-        if config[:container_name]
-          cmd << " --name #{config[:container_name]}"
-        elsif config[:instance_container_name]
-          cmd << " --name #{instance.name}"
-        end
+        cmd << " --name #{container_name}" if container_name
         cmd << ' -P' if config[:publish_all]
         cmd << " -m #{config[:memory_limit]}" if config[:memory_limit]
         cmd << " -c #{config[:cpu_shares]}" if config[:cpu_shares]
@@ -125,6 +129,14 @@ module Kitchen
         Array(config[:dns]).each {|dns| cmd << " --dns #{dns}"}
         Array(config[:add_host]).each {|mapping| cmd << " --add-host #{mapping}"}
         cmd << " #{image} #{config[:command]}"
+      end
+
+      def container_name
+        if config[:container_name]
+          config[:container_name]
+        elsif config[:instance_container_name]
+          instance.name
+        end
       end
 
       def parse_image_id(output)

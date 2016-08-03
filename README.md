@@ -200,6 +200,21 @@ Examples:
   instance_container_name: true
 ```
 
+
+### destroy_container_name
+
+Improve destroy action when containers have defined names.
+
+When enabled, "kitchen destroy" will always try to remove suite containers with their name (if defined by container_name or instance_container_name options) in addition to with the id defined in the current state. This allows a clean removal of containers even if the state is corrupted or was removed.
+
+The default value is `true`.
+
+Examples:
+
+```yml
+  destroy_container_name: false
+```
+
 ### network
 
 Set the Network mode for the container.  
