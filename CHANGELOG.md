@@ -1,3 +1,8 @@
+## 0.18.0
+
+* Pull request [#33][]: Strengthen destroy ([@s-bernard][])
+* Pull request [#33][]: Add `destroy_container_name` option ([@s-bernard][])
+
 ## 0.17.0
 
 * Pull request [#32][]: Add ability to configure security options ([@fphilippon][])
