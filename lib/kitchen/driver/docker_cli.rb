@@ -75,6 +75,7 @@ module Kitchen
               output = conn.run_docker("ps -a -q -f name=#{container_name}").chomp
               conn.run_docker("rm -f #{container_name}") unless output.empty?
             end
+            FileUtils.rm_f(dockerfile_path)
           rescue => e
             raise e unless conn.send(:options)[:lxc_driver]
           end
@@ -97,15 +98,18 @@ module Kitchen
         parse_container_id(output)
       end
 
+      def dockerfile_path
+        "#{config[:kitchen_root]}/.kitchen/#{config[:dockerfile]}_#{instance.name}_rendered"
+      end
+
       def docker_build_command
         cmd = String.new('build')
         cmd << ' --no-cache' if config[:no_cache]
         if config[:dockerfile]
           dockerfile_contents = docker_file()
           # save the Dockerfile contents rendered with ERB variables
-          dockerfile = "#{config[:kitchen_root]}/.kitchen/#{config[:dockerfile]}_#{instance.name}_rendered"
-          File.write(dockerfile, dockerfile_contents)
-          cmd << " -f #{dockerfile}"
+          File.write(dockerfile_path, dockerfile_contents)
+          cmd << " -f #{dockerfile_path}"
         end
         if config[:build_context]
           cmd << ' .'
