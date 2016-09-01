@@ -85,7 +85,13 @@ module Kitchen
       def build(state)
         output = ""
         instance.transport.connection(state) do |conn|
-          output = conn.run_docker(docker_build_command, :input => docker_file)
+          if config[:build_context]
+            # Dockerfile is sent using `-f` option
+            output = conn.run_docker(docker_build_command)
+          else
+            # Dockerfile contents is sent using stdin
+            output = conn.run_docker(docker_build_command, :input => docker_file)
+          end
         end
         parse_image_id(output)
       end
@@ -105,13 +111,11 @@ module Kitchen
       def docker_build_command
         cmd = String.new('build')
         cmd << ' --no-cache' if config[:no_cache]
-        if config[:dockerfile]
+        if config[:build_context]
           dockerfile_contents = docker_file()
           # save the Dockerfile contents rendered with ERB variables
           File.write(dockerfile_path, dockerfile_contents)
           cmd << " -f #{dockerfile_path}"
-        end
-        if config[:build_context]
           cmd << ' .'
         else
           cmd << ' -'
