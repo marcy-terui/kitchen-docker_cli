@@ -100,6 +100,13 @@ module Kitchen
       def docker_build_command
         cmd = String.new('build')
         cmd << ' --no-cache' if config[:no_cache]
+        if config[:dockerfile]
+          dockerfile_contents = docker_file()
+          # save the Dockerfile contents rendered with ERB variables
+          dockerfile = "#{config[:kitchen_root]}/.kitchen/#{config[:dockerfile]}_#{instance.name}_rendered"
+          File.write(dockerfile, dockerfile_contents)
+          cmd << " -f #{dockerfile}"
+        end
         if config[:build_context]
           cmd << ' .'
         else
