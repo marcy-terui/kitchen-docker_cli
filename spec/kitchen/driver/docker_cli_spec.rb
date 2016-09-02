@@ -82,6 +82,14 @@ describe Kitchen::Driver::DockerCli, "#docker_build_command" do
     end
   end
 
+  context 'build_pull specified' do
+    let(:config)	{ {:build_pull => false} }
+
+    example do
+      expect(@docker_cli.docker_build_command).to include '--pull=false'
+    end
+  end
+
   context 'default' do
     let(:config)       { {:no_cache => true} }
 
