@@ -99,6 +99,7 @@ module Kitchen
 
       def docker_build_command
         cmd = String.new('build')
+        cmd << " --pull=#{config[:build_pull]}" if config[:build_pull]
         cmd << ' --no-cache' if config[:no_cache]
         if config[:build_context]
           cmd << ' .'
