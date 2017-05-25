@@ -241,7 +241,7 @@ describe Kitchen::Driver::DockerCli, "#docker_file" do
       ret = "FROM ubuntu/12.04\n"
       ret << "RUN apt-get update\n"
       ret << "RUN apt-get -y install sudo curl tar\n"
-      ret << "ENV test=hoge\n"
+      ret << "ENV test=\"hoge\"\n"
       ret << "RUN test\n"
       ret << "RUN test2"
       expect(@docker_cli.send(:docker_file)).to eq ret
