@@ -60,10 +60,22 @@ module Kitchen
       end
 
       def create(state)
+        pre_create_command
         state[:image] = build(state) unless state[:image]
         state[:container_id] = run(state) unless state[:container_id]
       end
 
+      def pre_create_command
+        if config[:pre_create_command]
+          system(config[:pre_create_command])
+          if $?.exitstatus.nonzero?
+            raise ActionFailed,
+                  "pre_create_command '#{config[:pre_create_command]}' failed to execute \
+                  (exit status #{$?.exitstatus})"
+          end
+        end
+      end
+      
       def destroy(state)
         instance.transport.connection(state) do |conn|
           begin
