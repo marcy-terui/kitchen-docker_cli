@@ -1,0 +1,19 @@
+---
+version: 2
+jobs:
+  test:
+    services:
+      - docker
+    docker:
+      - image: circleci/ruby:2.5
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: bundle install --path=vendor/bundle
+      - run: bundle exec kitchen test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
