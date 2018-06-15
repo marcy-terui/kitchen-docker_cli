@@ -507,6 +507,18 @@ Example:
   docker_base: sudo /path/to/lxc-console
 ```
 
+### pre_create_command
+
+A script or shell command to run locally prior to creating the
+container.  Used to prep the build environment, e.g. performing a login
+to a private docker repository where the test images are housed.
+
+Example:
+
+```yml
+  pre_create_command: ./path/to/script.sh
+```
+
 ## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]
