@@ -129,6 +129,16 @@ environment:
 
 Pass the basedir as the Docker build context: 'docker build <options> .' Default is 'false'.
 
+### build_pull
+
+Set option `--pull` to the defined value on `docker build`.
+
+The default value is nil which is currently interpreted as `false` by Docker.
+
+```yml
+  build_pull: true
+```
+
 ### no_cache
 
 Not use the cached image on `docker build`.
