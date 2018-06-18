@@ -1,3 +1,10 @@
+## 0.19.0
+
+* Pull request [#43][]: Add pre_create_command to driver ([@ysgard][])
+* Pull request [#42][] [#44][]: Quote environments value to support spaces ([@ahelal][])
+* Pull request [#41][]: Add `build_pull` opt to pull the latest docker image ([@s-bernard][])
+* Pull request [#38][]: Never force tty when opening transport ([@bdellegrazie][])
+
 ## 0.18.0
 
 * Pull request [#33][]: Strengthen destroy ([@s-bernard][])
@@ -133,9 +140,21 @@
 [#23]: https://github.com/marcy-terui/kitchen-docker_cli/issues/23
 [#29]: https://github.com/marcy-terui/kitchen-docker_cli/issues/29
 [#30]: https://github.com/marcy-terui/kitchen-docker_cli/issues/30
+[#31]: https://github.com/marcy-terui/kitchen-docker_cli/issues/31
+[#32]: https://github.com/marcy-terui/kitchen-docker_cli/issues/32
+[#33]: https://github.com/marcy-terui/kitchen-docker_cli/issues/33
+[#38]: https://github.com/marcy-terui/kitchen-docker_cli/issues/38
+[#41]: https://github.com/marcy-terui/kitchen-docker_cli/issues/41
+[#42]: https://github.com/marcy-terui/kitchen-docker_cli/issues/42
+[#43]: https://github.com/marcy-terui/kitchen-docker_cli/issues/43
+[#44]: https://github.com/marcy-terui/kitchen-docker_cli/issues/44
+[@ahelal]: https://github.com/ahelal
+[@bdellegrazie]: https://github.com/bdellegrazie
+[@fphilippon]: https://github.com/fphilippon
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
 [@nrvale0]: https://github.com/nrvale0
 [@s-bernard]: https://github.com/s-bernard
 [@sawanoboly]: https://github.com/sawanoboly
 [@yewton]: https://github.com/yewton
+[@ysgard]: https://github.com/ysgard
