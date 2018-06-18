@@ -73,7 +73,7 @@ module Kitchen
             if @options[:lxc_driver]
               run_lxc(lxc_exec_command(@options[:container_id], cmd))
             else
-              run_docker(docker_exec_command(@options[:container_id], cmd, :tty => true))
+              run_docker(docker_exec_command(@options[:container_id], cmd, :tty => false))
             end
           end
         end
