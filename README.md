@@ -388,6 +388,17 @@ Examples:
     - container_b
 ```
 
+### mount
+
+Attach a filesystem mount to the container.
+
+Examples:
+
+```yml
+  mount: type=volume,source=my-volume,destination=/path/in/container
+```
+
+
 ### dockerfile
 
 Create test image using a supplied Dockerfile, instead of the default Dockerfile created.  
