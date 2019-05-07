@@ -137,6 +137,7 @@ module Kitchen
         Array(config[:publish]).each { |pub| cmd << " -p #{pub}" }
         Array(config[:volume]).each { |vol| cmd << " -v #{vol}" }
         Array(config[:volumes_from]).each { |vf| cmd << " --volumes-from #{vf}" }
+        Array(config[:mount]).each {|mount| cmd << " --mount #{mount}"}
         Array(config[:link]).each { |link| cmd << " --link #{link}" }
         Array(config[:expose]).each { |exp| cmd << " --expose #{exp}" }
         Array(config[:dns]).each {|dns| cmd << " --dns #{dns}"}
