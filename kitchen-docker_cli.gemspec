@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{A Test Kitchen Driver(and Transport) for Docker native CLI}
   spec.summary       = spec.description
   spec.homepage      = 'https://github.com/marcy-terui/kitchen-docker_cli'
-  spec.license       = 'Apache 2.0'
+  spec.license       = 'Apache-2.0'
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = []
