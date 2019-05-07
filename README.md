@@ -530,6 +530,17 @@ Example:
   pre_create_command: ./path/to/script.sh
 ```
 
+### no_docker_cp
+
+If true, it will not use docker\_cp to copy files into the container but the
+old classic way of a docker exec "tar ...".
+
+This option can be used as a workaround for this kind of bugs:
+https://github.com/moby/moby/issues/38252.
+
+It is better used in system config than in each cookbook as it is closely
+related to the system configuration.
+
 ## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]

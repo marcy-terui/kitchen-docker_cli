@@ -33,6 +33,7 @@ module Kitchen
       default_config :docker_base, "docker"
       default_config :lxc_attach_base, "sudo lxc-attach"
       default_config :lxc_console_base, "sudo lxc-console"
+      default_config :no_docker_cp, false
 
       def connection(state, &block)
         options = config.to_hash.merge(state)
@@ -92,11 +93,18 @@ module Kitchen
           Array(locals).each do |local|
             remote_cmd = "tar x -C #{remote}"
             if @options[:lxc_driver]
-              remote_cmd = "#{lxc_attach_base} #{lxc_exec_command(@options[:container_id], remote_cmd)}"
+              remote_cmd = "#{lxc_attach_base} "\
+                "#{lxc_exec_command(@options[:container_id], remote_cmd)}"
+            elsif @options[:no_docker_cp]
+              exec_cmd = docker_exec_command(@options[:container_id],
+                                             remote_cmd, interactive: true)
+              remote_cmd = "#{docker_base} #{exec_cmd}"
             else
-              remote_cmd = "#{docker_base} cp - #{@options[:container_id]}:#{remote}"
+              remote_cmd =
+                "#{docker_base} cp - #{@options[:container_id]}:#{remote}"
             end
-            local_cmd  = "cd #{File.dirname(local)} && tar cf - ./#{File.basename(local)}"
+            local_cmd =
+              "cd #{File.dirname(local)} && tar cf - ./#{File.basename(local)}"
             run_command("#{local_cmd} | #{remote_cmd}")
           end
         end
