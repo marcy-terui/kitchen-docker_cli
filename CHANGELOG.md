@@ -1,3 +1,8 @@
+## 0.20.0
+
+* Pull request [#47][]: Add transport option no_docker_cp ([@s-bernard][])
+* Pull request [#46][]: Added mount flag ([@ngustafson][])
+
 ## 0.19.0
 
 * Pull request [#43][]: Add pre_create_command to driver ([@ysgard][])
@@ -148,11 +153,14 @@
 [#42]: https://github.com/marcy-terui/kitchen-docker_cli/issues/42
 [#43]: https://github.com/marcy-terui/kitchen-docker_cli/issues/43
 [#44]: https://github.com/marcy-terui/kitchen-docker_cli/issues/44
+[#46]: https://github.com/marcy-terui/kitchen-docker_cli/issues/46
+[#47]: https://github.com/marcy-terui/kitchen-docker_cli/issues/47
 [@ahelal]: https://github.com/ahelal
 [@bdellegrazie]: https://github.com/bdellegrazie
 [@fphilippon]: https://github.com/fphilippon
 [@grubernaut]: https://github.com/grubernaut
 [@hd-deman]: https://github.com/hd-deman
+[@ngustafson]: https://github.com/ngustafson
 [@nrvale0]: https://github.com/nrvale0
 [@s-bernard]: https://github.com/s-bernard
 [@sawanoboly]: https://github.com/sawanoboly
