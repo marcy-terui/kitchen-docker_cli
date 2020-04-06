@@ -87,6 +87,7 @@ module Kitchen
               output = conn.run_docker("ps -a -q -f name=#{container_name}").chomp
               conn.run_docker("rm -f #{container_name}") unless output.empty?
             end
+            FileUtils.rm_f(dockerfile_path)
           rescue => e
             raise e unless conn.send(:options)[:lxc_driver]
           end
@@ -96,7 +97,13 @@ module Kitchen
       def build(state)
         output = ""
         instance.transport.connection(state) do |conn|
-          output = conn.run_docker(docker_build_command, :input => docker_file)
+          if config[:build_context]
+            # Dockerfile is sent using `-f` option
+            output = conn.run_docker(docker_build_command)
+          else
+            # Dockerfile contents is sent using stdin
+            output = conn.run_docker(docker_build_command, :input => docker_file)
+          end
         end
         parse_image_id(output)
       end
@@ -109,11 +116,19 @@ module Kitchen
         parse_container_id(output)
       end
 
+      def dockerfile_path
+        "#{config[:kitchen_root]}/.kitchen/#{config[:dockerfile]}_#{instance.name}_rendered"
+      end
+
       def docker_build_command
         cmd = String.new('build')
         cmd << " --pull=#{config[:build_pull]}" if config[:build_pull]
         cmd << ' --no-cache' if config[:no_cache]
         if config[:build_context]
+          dockerfile_contents = docker_file()
+          # save the Dockerfile contents rendered with ERB variables
+          File.write(dockerfile_path, dockerfile_contents)
+          cmd << " -f #{dockerfile_path}"
           cmd << ' .'
         else
           cmd << ' -'
